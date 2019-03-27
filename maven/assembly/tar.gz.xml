@@ -8,7 +8,7 @@
     </formats>
     <fileSets>
         <fileSet>
-            <directory>${project.basedir}/dist/statics</directory>
+            <directory>${project.basedir}/dist/src</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
                 <include>*</include>
