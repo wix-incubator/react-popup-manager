@@ -1,1 +1,1 @@
-# react-popup-provider
+# react-popup-manager

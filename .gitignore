@@ -1,0 +1,11 @@
+node_modules
+dist
+target
+storybook-static
+coverage
+typings
+maven
+.history
+test/e2e/screenshots
+.idea
+npm-debug.log
