@@ -9,3 +9,5 @@ maven
 test/e2e/screenshots
 .idea
 npm-debug.log
+package
+react-popup-manager-1.0.0.tgz

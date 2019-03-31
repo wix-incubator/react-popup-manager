@@ -12,7 +12,8 @@
   },
   "files": [
     "dist/src",
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "scripts": {
     "start": "yoshi start",
