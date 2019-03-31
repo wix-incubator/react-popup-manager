@@ -28,19 +28,19 @@ export class TestPopupsDriver {
   }
 
   public given = {
-    popupManager: (popupManager: PopupManager, customName?: string) => {
+    popupManager: (popupManager: PopupManager, customName?: string): TestPopupsDriver => {
       this.popupManager = popupManager;
       this.popupManagerName = customName;
       return this;
     },
-    component: (component: React.ComponentType) => {
+    component: (component: React.ComponentType): TestPopupsDriver => {
       this.componentType = component;
       return this;
     },
   };
 
   public when = {
-    create: () => {
+    create: (): TestPopupsDriver => {
       this.component = this.render(props => {
         const ComponentWithPopupManager = withPopups(this.popupManagerName)(
           _props1 => <this.componentType {..._props1} />,
@@ -52,9 +52,11 @@ export class TestPopupsDriver {
           </PopupProvider>
         );
       });
+
+      return this;
     },
     testPopup1: {
-      closePopup: () => {
+      closePopup: (): TestPopupsDriver => {
         this.get
           .testPopup1()
           .closeButton()
@@ -63,7 +65,7 @@ export class TestPopupsDriver {
       },
     },
     testPopup2: {
-      closePopup: () => {
+      closePopup: (): TestPopupsDriver => {
         this.get
           .testPopup2()
           .closeButton()
@@ -72,7 +74,7 @@ export class TestPopupsDriver {
       },
     },
     inGivenComponent: {
-      clickOn: dataHook => {
+      clickOn: (dataHook): TestPopupsDriver => {
         this.getByDataHook(dataHook, this.get.givenComponent()).simulate(
           'click',
         );

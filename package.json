@@ -11,7 +11,8 @@
     "email": "guyw@wix.com"
   },
   "files": [
-    "dist/src"
+    "dist/src",
+    "index.js"
   ],
   "scripts": {
     "start": "yoshi start",
