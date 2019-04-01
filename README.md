@@ -58,8 +58,8 @@ import Modal from 'react-modal';
 class MyModal {
     render() {
         return <Modal isOpen={true} >
-                            <button onClick={() => this.props.onClose()}
-                    </Modal>;
+                        <button onClick={() => this.props.onClose()}
+                </Modal>;
     }
 }
 
