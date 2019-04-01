@@ -4,15 +4,15 @@ import { PopupsWrapper } from './PopupsWrapper';
 import { PopupContext } from './PopupContext';
 
 export interface PopupsProviderProps {
-  popupManager: PopupManager;
-  children: any;
+  popupManager?: PopupManager;
+  children?: any;
 }
 
 export class PopupProvider extends React.Component<PopupsProviderProps> {
   private readonly popupManager: PopupManager;
   constructor(props, context) {
     super(props, context);
-    this.popupManager = props.popupManager;
+    this.popupManager = props.popupManager || new PopupManager();
   }
 
   public render() {

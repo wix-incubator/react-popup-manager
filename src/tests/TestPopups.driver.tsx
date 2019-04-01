@@ -47,7 +47,7 @@ export class TestPopupsDriver {
         );
 
         return (
-          <PopupProvider popupManager={this.popupManager}>
+          <PopupProvider {...(this.popupManager ? {popupManager:this.popupManager}: null)}>
             <ComponentWithPopupManager {...props} />
           </PopupProvider>
         );

@@ -1,6 +1,7 @@
 import { TestPopupsDriver } from './TestPopups.driver';
 import { TestPopupsManager } from './testPopupsManager';
 import * as React from 'react';
+import {TestPopup1} from "./testPopups";
 
 describe('Popups', () => {
   let driver: TestPopupsDriver;
@@ -12,7 +13,28 @@ describe('Popups', () => {
     popupManager = new TestPopupsManager();
   });
 
-  it('should open popup', () => {
+  it('should open popup using default popup manager', () => {
+    const testedComponent = props => (
+        <div>
+          <button
+              data-hook="button-open"
+              onClick={() => props.popupManager.open(TestPopup1)}
+          />
+        </div>
+    );
+
+    driver.given.component(testedComponent);
+
+    driver.when.create();
+
+    expect(driver.get.isPopupOpen()).toBe(false);
+    driver.when.inGivenComponent.clickOn(buttonOpen);
+
+    expect(driver.get.isPopupOpen()).toBe(true);
+    expect(driver.get.testPopup1().exists()).toBe(true);
+  });
+
+  it('should open popup with custom popup manager', () => {
     const testedComponent = props => (
       <div>
         <button
