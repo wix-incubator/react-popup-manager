@@ -19,15 +19,10 @@ $ npm i --save react-popup-manager
 $ yarn add react-popup-manager
 ```
 
-### some code
-
-// app.ts
-
-`PopupProvider` can receive a custom extended `PopupManager` with your custom functions (for example: `openDeletePrompt()`).
-<br><br>
-By default it will initialize `PopupManager`
+### usage
 
 ```
+// app.ts
 import { PopupProvider } from 'react-popup-manager';
 
 <PopupProvider>
@@ -35,12 +30,12 @@ import { PopupProvider } from 'react-popup-manager';
 </PopupProvider>
 ```
 
-
-// main.tsx
-
-HOC `@withPopups()` adds `popupManager`(or custom name you give as an argument) to `props`
-
+`PopupProvider` can receive a custom extended `PopupManager` with your custom functions (for example: `openDeletePrompt()`) as a prop (`popupManager={myCustomPopupManager}`).
+<br>
+~ By default it will initialize `PopupManager` by it self
+<br><br>
 ```
+// main.tsx
 import { MyModal } from './MyModal'
 import { withPopups } from 'react-popup-manager';
 
@@ -54,17 +49,10 @@ class Main {
 }
 ```
 
-
-// MyModal.tsx
-
-When opening popup with `popupManager.open(MyModal)`, it passes prop `onClose`,
-to close oneself.
-<br>
-This library is agnostic to any use of popup library you decide to use.
-<br>
-~ in this example we will use `react-modal`
-
+HOC `@withPopups()` adds `popupManager`(or custom name you give as an argument) to `props`
+<br><br>
 ```
+// MyModal.tsx
 import Modal from 'react-modal';
 
 class MyModal {
@@ -76,3 +64,10 @@ class MyModal {
 }
 
 ```
+
+When opening popup with `popupManager.open(MyModal)`, it passes prop `onClose`,
+to close oneself.
+<br>
+The library is agnostic to any popup library you decide to use.
+<br>
+~ in this example we used `react-modal`
