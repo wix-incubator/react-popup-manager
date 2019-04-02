@@ -21,7 +21,7 @@ $ yarn add react-popup-manager
 
 ### usage
 
-```
+```javascript
 // app.ts
 import { PopupProvider } from 'react-popup-manager';
 
@@ -34,7 +34,7 @@ import { PopupProvider } from 'react-popup-manager';
 <br>
 ~ By default it will initialize `PopupManager` by it self
 <br><br>
-```
+```javascript
 // main.tsx
 import { MyModal } from './MyModal'
 import { withPopups } from 'react-popup-manager';
@@ -43,21 +43,26 @@ import { withPopups } from 'react-popup-manager';
 class Main {
     ...
     openModal() {
-        this.props.popupManager.open(MyModal);
+        this.props.popupManager.open(MyModal, {title: 'my modal', onClose: () => console.log('modal has closed')});
     }
     ...
 }
 ```
 
-HOC `@withPopups()` adds `popupManager`(or custom name you give as an argument) to `props`
+HOC `@withPopups()` adds `popupManager` to `props`
 <br><br>
-```
+`@withPopups([managerName])` - accepts name that will be instead of `popupManager`
+<br>
+`popupManager.open(componentClass[, props])`-  accepts `componentClass` and `props` (`onClose` will be called on actual popup close)
+<br><br>
+```javascript
 // MyModal.tsx
 import Modal from 'react-modal';
 
 class MyModal {
     render() {
         return <Modal isOpen={true} >
+                        <span>{this.props.title}</span>
                         <button onClick={() => this.props.onClose()}
                 </Modal>;
     }
