@@ -28,18 +28,13 @@ import { PopupProvider } from 'react-popup-manager';
 <PopupProvider>
     <Main/>
 </PopupProvider>
-```
 
-`PopupProvider` can receive a custom extended `PopupManager` with your custom functions (for example: `openDeletePrompt()`) as a prop (`popupManager={myCustomPopupManager}`).
-<br>
-~ By default it will initialize `PopupManager` by it self
-<br><br>
-```javascript
+
 // main.tsx
 import { MyModal } from './MyModal'
 import { withPopups } from 'react-popup-manager';
 
-@withPopups()
+@withPopups() // adds 'popupManager' to props
 class Main {
     ...
     openModal() {
@@ -47,32 +42,50 @@ class Main {
     }
     ...
 }
-```
 
-HOC `@withPopups()` adds `popupManager` to `props`
-<br><br>
-`@withPopups([managerName])` - accepts name that will be instead of `popupManager`
-<br>
-`popupManager.open(componentClass[, props])`-  accepts `componentClass` and `props` (`onClose` will be called on actual popup close)
-<br><br>
-```javascript
 // MyModal.tsx
 import Modal from 'react-modal';
 
 class MyModal {
+
+    close() {
+        // `onClose` is added by 'PopupManager' to props
+        this.props.onClose();
+    }
+
     render() {
         return <Modal isOpen={true} >
                         <span>{this.props.title}</span>
-                        <button onClick={() => this.props.onClose()}
+                        <button onClick={() => this.close()}
                 </Modal>;
     }
 }
 
 ```
 
-When opening popup with `popupManager.open(MyModal)`, it passes prop `onClose`,
-to close oneself.
-<br>
 The library is agnostic to any popup library you decide to use.
 <br>
 ~ in this example we used `react-modal`
+
+### API
+
+#### `PopupProvider`
+`props`:
+* `popupManager` - Popup Manager. can send custom extended `PopupManager`. <br>
+ <i>~ Default : uses `PopupManager`</i>
+
+#### `@withPopups(managerName)`
+HOC that adds `popupManager` to `props` of component
+<br><br>
+`parameters`:
+* `managerName` <i>(optional)</i> - set manager name. `example: 'myCustomPopupManager'`
+<br>
+<i>~ Default : uses `popupManager`</i>
+
+#### `PopupManager`
+`open(componentClass [, props])` -
+* `componentClass` - component's class or function
+* `props` <i>(optional)</i> - component's props.
+    * `onClose` - will be called on actual popup close.br>
+
+`closeAll()` - closes all open popups
