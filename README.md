@@ -70,22 +70,22 @@ The library is agnostic to any popup library you decide to use.
 ## API
 
 ### `PopupProvider`
-&nbsp;&nbsp;`props`:
+&nbsp;`props`:
 * `popupManager` - Popup Manager. can send custom extended `PopupManager`. <br>
  <i>~ Default : uses `PopupManager`</i>
 
 ### `@withPopups(managerName)`
-&nbsp;&nbsp;HOC that adds `popupManager` to `props` of component
+&nbsp;HOC that adds `popupManager` to `props` of component
 <br><br>
-&nbsp;&nbsp;`parameters`:
-* `managerName` <i>(optional)</i> - set manager name. `example: 'myCustomPopupManager'`
-<br>
-&nbsp;&nbsp;<i>~ Default : uses `popupManager`</i>
+&nbsp;`parameters`:
+* `managerName` <i>(optional)</i> - set manager name that will be added to props.
+
+&nbsp;<i>~ Default : uses `popupManager`</i>
 
 ### `PopupManager`
-&nbsp;&nbsp;`open(componentClass [, props])`
+&nbsp;`open(componentClass, popupProps)`
 * `componentClass` - component's class or function
-* `props` <i>(optional)</i> - component's props.
-    * `onClose` - will be called on actual popup close.br>
+* `popupProps` <i>(optional)</i> - popup's props.
+    * `onClose` - will be called on actual popup close
 
-&nbsp;&nbsp;`closeAll()` - closes all open popups
+&nbsp;`closeAll()` - closes all open popups
