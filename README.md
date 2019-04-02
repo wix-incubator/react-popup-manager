@@ -67,25 +67,25 @@ The library is agnostic to any popup library you decide to use.
 <br>
 ~ in this example we used `react-modal`
 
-### API
+## API
 
-#### `PopupProvider`
-`props`:
+### `PopupProvider`
+&nbsp;&nbsp;`props`:
 * `popupManager` - Popup Manager. can send custom extended `PopupManager`. <br>
  <i>~ Default : uses `PopupManager`</i>
 
-#### `@withPopups(managerName)`
-HOC that adds `popupManager` to `props` of component
+### `@withPopups(managerName)`
+&nbsp;&nbsp;HOC that adds `popupManager` to `props` of component
 <br><br>
-`parameters`:
+&nbsp;&nbsp;`parameters`:
 * `managerName` <i>(optional)</i> - set manager name. `example: 'myCustomPopupManager'`
 <br>
-<i>~ Default : uses `popupManager`</i>
+&nbsp;&nbsp;<i>~ Default : uses `popupManager`</i>
 
-#### `PopupManager`
-`open(componentClass [, props])` -
+### `PopupManager`
+&nbsp;&nbsp;`open(componentClass [, props])`
 * `componentClass` - component's class or function
 * `props` <i>(optional)</i> - component's props.
     * `onClose` - will be called on actual popup close.br>
 
-`closeAll()` - closes all open popups
+&nbsp;&nbsp;`closeAll()` - closes all open popups
