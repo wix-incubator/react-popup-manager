@@ -2,7 +2,7 @@
 Manage react popups, Modals, Lightboxes, Notifications etc.
 
 ## What
-an agnostic react provider that lets you handle opening and closing popups separately from you're Component `render` function.
+An agnostic react provider that lets you handle opening and closing popups separately from you're Component `render` function.
 
 ## Why
 * no need to manage the `isOpen` state
