@@ -22,12 +22,16 @@ $ yarn add react-popup-manager
 ### usage
 
 ```javascript
-// app.ts
+// app.tsx
 import { PopupProvider } from 'react-popup-manager';
+import * as ReactDOM from 'react-dom';
 
-<PopupProvider>
-    <Main/>
-</PopupProvider>
+ReactDOM.render(
+        <PopupProvider>
+            <Main/>
+        </PopupProvider>,
+        document.getElementById("root")
+    );
 
 
 // main.tsx
