@@ -27,6 +27,10 @@ export class TestPopupsDriver {
     return parent.find(`[data-hook="${hook}"]`);
   }
 
+  public update() {
+    this.component.update();
+  }
+
   public given = {
     popupManager: (popupManager: PopupManager, customName?: string): TestPopupsDriver => {
       this.popupManager = popupManager;

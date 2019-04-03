@@ -56,7 +56,7 @@ describe('Popups', () => {
   });
 
   it('should close popup using open\'s return instance', () => {
-    const testedComponent = props => (
+    const testedComponent = () => (
         <div>
           nada
         </div>
@@ -67,9 +67,10 @@ describe('Popups', () => {
     driver.when.create();
 
     const testPopup1 = popupManager.openTestPopup1();
-
+    driver.update();
     expect(driver.get.testPopup1().exists()).toBe(true);
     testPopup1.close();
+    driver.update();
     expect(driver.get.testPopup1().exists()).toBe(false);
   });
 
