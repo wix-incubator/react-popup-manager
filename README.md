@@ -75,7 +75,7 @@ The library is agnostic to any popup library you decide to use.
 
 ### `PopupProvider`
 `props`:
-* `popupManager` - Popup Manager. can send custom extended `PopupManager`. <br>
+* `popupManager` <i>(optional)</i> - Popup Manager. can send custom extended `PopupManager`. <br>
  <i>~ Default : uses `PopupManager`</i>
 
 ### `@withPopups(managerName)`
