@@ -9,6 +9,6 @@ export class PopupsDriver {
   }
 
   public get = {
-    isOpen: () => !this.component.isEmptyRender(),
+    isAnyPopupsOpen: () => !this.component.isEmptyRender(),
   };
 }

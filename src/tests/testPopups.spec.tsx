@@ -55,6 +55,24 @@ describe('Popups', () => {
     expect(driver.get.testPopup1().exists()).toBe(true);
   });
 
+  it('should close popup using open\'s return instance', () => {
+    const testedComponent = props => (
+        <div>
+          nada
+        </div>
+    );
+
+    driver.given.popupManager(popupManager).given.component(testedComponent);
+
+    driver.when.create();
+
+    const testPopup1 = popupManager.openTestPopup1();
+
+    expect(driver.get.testPopup1().exists()).toBe(true);
+    testPopup1.close();
+    expect(driver.get.testPopup1().exists()).toBe(false);
+  });
+
   it('should open popup with custom manager name', () => {
     const customManagerName = 'customName';
     const testedComponent = props => (

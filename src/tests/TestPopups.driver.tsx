@@ -110,6 +110,6 @@ export class TestPopupsDriver {
       closeButton: () =>
         this.getByDataHook('close-button', this.get.testPopup2().component()),
     }),
-    isPopupOpen: () => this.getPopupsDriver().get.isOpen(),
+    isPopupOpen: () => this.getPopupsDriver().get.isAnyPopupsOpen(),
   };
 }

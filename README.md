@@ -87,9 +87,11 @@ HOC that adds `popupManager` to `props` of component
 <i>~ Default : uses `popupManager`</i>
 
 ### `PopupManager`
-`open(componentClass, popupProps)`
+`open(componentClass, popupProps)` - opens popup. render's popup component
 * `componentClass` - component's class or function
 * `popupProps` <i>(optional)</i> - popup's props.
     * `onClose` - will be called on actual popup close
+* returns - instance of open popup
+    * `close` - closes the popup
 
-`closeAll()` - closes all open popups
+`closeAll()` - closes all open popups. removes popup from DOM
