@@ -21,7 +21,7 @@ $ yarn add react-popup-manager
 
 ### usage
 
-```javascript
+```jsx
 // app.tsx
 import { PopupProvider } from 'react-popup-manager';
 import * as ReactDOM from 'react-dom';
