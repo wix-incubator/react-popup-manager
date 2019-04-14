@@ -22,35 +22,43 @@ $ yarn add react-popup-manager
 ### usage
 
 ```jsx
-// app.tsx
-import { PopupProvider } from 'react-popup-manager';
-import * as ReactDOM from 'react-dom';
+// app.jsx
+import React from "react";
+import ReactDOM from "react-dom";
+import { PopupProvider } from "react-popup-manager";
+import { Main } from "./Main";
 
 ReactDOM.render(
-        <PopupProvider>
-            <Main/>
-        </PopupProvider>,
-        document.getElementById("root")
-    );
+  <PopupProvider>
+    <Main />
+  </PopupProvider>,
+  document.getElementById("root")
+);
 
 
-// main.tsx
+// main.jsx
+import React from "react";
+import { withPopups } from "react-popup-manager";
 import { MyModal } from './MyModal'
-import { withPopups } from 'react-popup-manager';
 
-@withPopups() // adds 'popupManager' to props
-class Main {
-    ...
-    openModal() {
-        this.props.popupManager.open(MyModal, {title: 'my modal', onClose: () => console.log('modal has closed')});
-    }
-    ...
+class Main extends React.Component {
+  openModal() {
+    this.props.popupManager.open(MyModal, {title: 'my modal', onClose: () => console.log('modal has closed')});
+  }
+  render() {
+    return <button onClick={() => this.openModal()}> open modal </button>;
+  }
 }
 
-// MyModal.tsx
+const wrappedMain = withPopups()(Main); // adds 'popupManager' to props
+export {wrappedMain as Main};
+
+
+// MyModal.jsx
+import React from 'react';
 import Modal from 'react-modal';
 
-class MyModal {
+export class MyModal extends React.Component {
 
     close() {
         // `onClose` is added by 'PopupManager' to props
@@ -58,10 +66,12 @@ class MyModal {
     }
 
     render() {
-        return <Modal isOpen={true} >
-                        <span>{this.props.title}</span>
-                        <button onClick={() => this.close()}
-                </Modal>;
+        return (
+            <Modal isOpen={true} >
+               <span>{this.props.title}</span>
+               <button onClick={() => this.close()}> close </button>
+             </Modal>
+        );
     }
 }
 
@@ -78,7 +88,7 @@ The library is agnostic to any popup library you decide to use.
 * `popupManager` <i>(optional)</i> - Popup Manager. can send custom extended `PopupManager`. <br>
  <i>~ Default : uses `PopupManager`</i>
 
-### `@withPopups(managerName)`
+### `withPopups(managerName)`
 HOC that adds `popupManager` to `props` of component
 <br><br>
 `parameters`:
