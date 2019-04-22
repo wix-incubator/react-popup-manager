@@ -19,8 +19,8 @@ export class PopupProvider extends React.Component<PopupsProviderProps> {
     const { children } = this.props;
     return (
       <PopupContext.Provider value={{ popupManager: this.popupManager }}>
-        {children}
         <PopupsWrapper popupManager={this.popupManager} />
+        {children}
       </PopupContext.Provider>
     );
   }
