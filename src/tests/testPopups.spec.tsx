@@ -122,6 +122,31 @@ describe('Popups', () => {
     expect(onClose).toHaveBeenCalled();
   });
 
+  it('should close popup with params', () => {
+    const onClose = jest.fn();
+    const content = 'popup content';
+
+    const testedComponent = props => (
+        <div>
+          <button
+              data-hook="button-open"
+              onClick={() => props.popupManager.openTestPopup1(onClose, content)}
+          />
+        </div>
+    );
+
+    driver.given.popupManager(popupManager).given.component(testedComponent);
+
+    driver.when.create();
+
+    driver.when.inGivenComponent.clickOn(buttonOpen);
+
+    driver
+        .when.testPopup1.closePopup();
+    expect(driver.get.testPopup1().exists()).toBe(false);
+    expect(onClose).toHaveBeenCalledWith('value', true, 1);
+  });
+
   it('should pass popup its own props', () => {
     const content = 'popup content';
 

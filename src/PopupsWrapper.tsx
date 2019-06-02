@@ -11,11 +11,11 @@ export class PopupsWrapper extends React.Component<PopupsWrapperProps> {
     props.popupManager.subscribeOnPopupsChange(() => this.forceUpdate());
   }
 
-  private onClose(currentPopup: PopupItem) {
+  private onClose(currentPopup: PopupItem, params) {
     this.props.popupManager.close(currentPopup.guid);
     currentPopup.props &&
       currentPopup.props.onClose &&
-      currentPopup.props.onClose();
+      currentPopup.props.onClose(...params);
   }
 
   public render() {
@@ -25,7 +25,7 @@ export class PopupsWrapper extends React.Component<PopupsWrapperProps> {
       <currentPopup.ComponentClass
         {...currentPopup.props}
         key={currentPopup.guid}
-        onClose={() => this.onClose(currentPopup)}
+        onClose={(...params) => this.onClose(currentPopup, params)}
       />
     ));
   }

@@ -43,7 +43,7 @@ import { MyModal } from './MyModal'
 
 class Main extends React.Component {
   openModal() {
-    this.props.popupManager.open(MyModal, {title: 'my modal', onClose: () => console.log('modal has closed')});
+    this.props.popupManager.open(MyModal, {title: 'my modal', onClose: (...params) => console.log('modal has closed with:', ...params)}); // modal has closed with: param param2 param3
   }
   render() {
     return <button onClick={() => this.openModal()}> open modal </button>;
@@ -62,7 +62,7 @@ export class MyModal extends React.Component {
 
     close() {
         // `onClose` is added by 'PopupManager' to props
-        this.props.onClose();
+        this.props.onClose('param', 'param2', 'param3');
     }
 
     render() {
@@ -100,7 +100,7 @@ HOC that adds `popupManager` to `props` of component
 `open(componentClass, popupProps)` - opens popup. render's popup component
 * `componentClass` - component's class or function
 * `popupProps` <i>(optional)</i> - popup's props.
-    * `onClose` - will be called on actual popup close
+    * `onClose` - will be called on actual popup close with arguments
 * returns - object of open popup
     * `close` - closes the popup
 
