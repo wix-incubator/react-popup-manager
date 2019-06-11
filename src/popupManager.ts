@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { generateGuid } from './utils/generateGuid';
+import { PopupProps } from './popupsDef';
 
 export interface PopupItem {
   ComponentClass: any;
@@ -23,9 +24,9 @@ export class PopupManager {
     this.onPopupsChangeEvents.push(callback);
   }
 
-  public open(
-    componentClass: React.ComponentType<any>,
-    popupProps?: {},
+  public open<T>(
+    componentClass: React.ComponentType<T>,
+    popupProps?: T & PopupProps,
   ): popupInstance {
     const guid = generateGuid();
     this.openPopups.push({

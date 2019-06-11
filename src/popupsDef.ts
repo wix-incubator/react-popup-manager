@@ -1,7 +1,7 @@
 import { PopupManager } from './popupManager';
 
 export interface PopupProps {
-  onClose(...params): any;
+  onClose?(...params): any;
 }
 
 export interface WithPopupsProps {
