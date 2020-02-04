@@ -1,7 +1,8 @@
 import { TestPopupsDriver } from './TestPopups.driver';
 import { TestPopupsManager } from './testPopupsManager';
 import * as React from 'react';
-import {TestPopup1} from "./testPopups";
+import {TestPopup1, TestPopupWithAnimation} from "./testPopups";
+import {PopupManager} from '../popupManager';
 
 describe('Popups', () => {
   let driver: TestPopupsDriver;
@@ -221,5 +222,32 @@ describe('Popups', () => {
     driver.when.inGivenComponent.clickOn('button-close-all');
     expect(driver.get.testPopup1().exists()).toBe(false);
     expect(driver.get.testPopup2().exists()).toBe(false);
+  });
+
+  fit('should close popup using isOpen - allow animation', () => {
+    const testedComponent = (props:{popupManager: PopupManager})  => (
+      <div>
+        <button
+          data-hook="button-open"
+          onClick={() => props.popupManager.open(TestPopupWithAnimation, {
+            onClose: () => console.log('popup was closed'),
+            timeOutMS: 100,
+            isOpen: true,
+          })}
+        />
+      </div>
+    );
+
+    driver.given.component(testedComponent);
+
+    driver.when.create();
+
+    expect(driver.get.isPopupOpen()).toBe(false);
+    driver.when.inGivenComponent.clickOn(buttonOpen);
+    driver.when.testPopupWithAnimation.closePopup();
+
+    expect(driver.get.testPopupWithAnimation().exists()).toBe(true);
+    jest.advanceTimersByTime(100);
+    expect(driver.get.testPopupWithAnimation().exists()).toBe(false);
   });
 });

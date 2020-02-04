@@ -37,7 +37,7 @@ export class TestPopupsDriver {
       this.popupManagerName = customName;
       return this;
     },
-    component: (component: React.ComponentType): TestPopupsDriver => {
+    component: (component: React.ComponentType<any>): TestPopupsDriver => {
       this.componentType = component;
       return this;
     },
@@ -77,6 +77,15 @@ export class TestPopupsDriver {
         return this;
       },
     },
+    testPopupWithAnimation: {
+      closePopup: (): TestPopupsDriver => {
+        this.get
+          .testPopupWithAnimation()
+          .closeButton()
+          .simulate('click');
+        return this;
+      },
+    },
     inGivenComponent: {
       clickOn: (dataHook): TestPopupsDriver => {
         this.getByDataHook(dataHook, this.get.givenComponent()).simulate(
@@ -89,6 +98,21 @@ export class TestPopupsDriver {
 
   public get = {
     givenComponent: () => this.component.find(this.componentType),
+    testPopupWithAnimation: () => ({
+      component: () => this.getByDataHook('test-popup-with-animation'),
+      exists: () =>
+        this.get
+          .testPopupWithAnimation()
+          .component()
+          .exists(),
+      closeButton: () =>
+        this.getByDataHook('close-button', this.get.testPopupWithAnimation().component()),
+      content: () =>
+        this.getByDataHook(
+          'popup-content',
+          this.get.testPopupWithAnimation().component(),
+        ).text(),
+    }),
     testPopup1: () => ({
       component: () => this.getByDataHook('test-hook'),
       exists: () =>
