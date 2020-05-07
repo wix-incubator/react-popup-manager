@@ -1,13 +1,14 @@
 import { TestPopupsDriver } from './TestPopups.driver';
 import { TestPopupsManager } from './testPopupsManager';
 import * as React from 'react';
-import {TestPopup1, TestPopupWithAnimation} from "./testPopups";
+import {TestPopup } from "./testPopups";
 import {PopupManager} from '../popupManager';
 
 describe('Popups', () => {
   let driver: TestPopupsDriver;
   let popupManager: TestPopupsManager;
   const buttonOpen = 'button-open';
+  const generateDataHook = (index = 0) =>  `test-popup-${index}`;
 
   beforeEach(() => {
     driver = new TestPopupsDriver();
@@ -15,11 +16,11 @@ describe('Popups', () => {
   });
 
   it('should open popup using default popup manager', () => {
-    const testedComponent = props => (
+    const testedComponent = (props:{popupManager: PopupManager}) => (
         <div>
           <button
               data-hook="button-open"
-              onClick={() => props.popupManager.open(TestPopup1)}
+              onClick={() => props.popupManager.open(TestPopup, {dataHook: generateDataHook(), content: ''})}
           />
         </div>
     );
@@ -32,15 +33,15 @@ describe('Popups', () => {
     driver.when.inGivenComponent.clickOn(buttonOpen);
 
     expect(driver.get.isPopupOpen()).toBe(true);
-    expect(driver.get.testPopup1().exists()).toBe(true);
+    expect(driver.get.popupDriver(generateDataHook()).get.exists()).toBe(true);
   });
 
   it('should open popup with custom popup manager', () => {
-    const testedComponent = props => (
+    const testedComponent = (props: {popupManager: TestPopupsManager}) => (
       <div>
         <button
           data-hook="button-open"
-          onClick={() => props.popupManager.openTestPopup1()}
+          onClick={() => props.popupManager.openTestPopup(generateDataHook())}
         />
       </div>
     );
@@ -53,7 +54,7 @@ describe('Popups', () => {
     driver.when.inGivenComponent.clickOn(buttonOpen);
 
     expect(driver.get.isPopupOpen()).toBe(true);
-    expect(driver.get.testPopup1().exists()).toBe(true);
+    expect(driver.get.popupDriver(generateDataHook()).get.exists()).toBe(true);
   });
 
   it('should close popup using open\'s return instance', () => {
@@ -67,21 +68,21 @@ describe('Popups', () => {
 
     driver.when.create();
 
-    const testPopup1 = popupManager.openTestPopup1();
+    const testPopup1 = popupManager.openTestPopup(generateDataHook());
     driver.update();
-    expect(driver.get.testPopup1().exists()).toBe(true);
+    expect(driver.get.popupDriver(generateDataHook()).get.exists()).toBe(true);
     testPopup1.close();
     driver.update();
-    expect(driver.get.testPopup1().exists()).toBe(false);
+    expect(driver.get.popupDriver(generateDataHook()).get.exists()).toBe(false);
   });
 
   it('should open popup with custom manager name', () => {
     const customManagerName = 'customName';
-    const testedComponent = props => (
+    const testedComponent = (props: {[customManagerName]: TestPopupsManager}) => (
       <div>
         <button
           data-hook="button-open"
-          onClick={() => props[customManagerName].openTestPopup1()}
+          onClick={() => props[customManagerName].openTestPopup(generateDataHook())}
         />
       </div>
     );
@@ -96,18 +97,18 @@ describe('Popups', () => {
     driver.when.inGivenComponent.clickOn(buttonOpen);
 
     expect(driver.get.isPopupOpen()).toBe(true);
-    expect(driver.get.testPopup1().exists()).toBe(true);
+    expect(driver.get.popupDriver(generateDataHook()).get.exists()).toBe(true);
   });
 
   it('should close popup and call callback', () => {
     const onClose = jest.fn();
     const content = 'popup content';
 
-    const testedComponent = props => (
+    const testedComponent = (props: {popupManager: TestPopupsManager}) => (
       <div>
         <button
           data-hook="button-open"
-          onClick={() => props.popupManager.openTestPopup1(onClose, content)}
+          onClick={() => props.popupManager.openTestPopup(generateDataHook(), onClose, content)}
         />
       </div>
     );
@@ -118,20 +119,19 @@ describe('Popups', () => {
 
     driver.when.inGivenComponent.clickOn(buttonOpen);
 
-    driver.when.testPopup1.closePopup();
-    expect(driver.get.testPopup1().exists()).toBe(false);
+    driver.get.popupDriver(generateDataHook()).when.closePopup();
+    expect(driver.get.popupDriver(generateDataHook()).get.exists()).toBe(false);
     expect(onClose).toHaveBeenCalled();
   });
 
-  it('should close popup with params', () => {
+ it('should close popup with params', () => {
     const onClose = jest.fn();
-    const content = 'popup content';
 
-    const testedComponent = props => (
+    const testedComponent = (props: {popupManager: TestPopupsManager}) => (
         <div>
           <button
               data-hook="button-open"
-              onClick={() => props.popupManager.openTestPopup1(onClose, content)}
+              onClick={() => props.popupManager.openTestPopup(generateDataHook(), onClose)}
           />
         </div>
     );
@@ -142,20 +142,19 @@ describe('Popups', () => {
 
     driver.when.inGivenComponent.clickOn(buttonOpen);
 
-    driver
-        .when.testPopup1.closePopup();
-    expect(driver.get.testPopup1().exists()).toBe(false);
+    driver.get.popupDriver(generateDataHook()).when.closePopup();
+    expect(driver.get.popupDriver(generateDataHook()).get.exists()).toBe(false);
     expect(onClose).toHaveBeenCalledWith('value', true, 1);
   });
 
   it('should pass popup its own props', () => {
     const content = 'popup content';
 
-    const testedComponent = props => (
+    const testedComponent = (props: {popupManager: TestPopupsManager}) => (
       <div>
         <button
           data-hook="button-open"
-          onClick={() => props.popupManager.openTestPopup1(undefined, content)}
+          onClick={() => props.popupManager.openTestPopup(generateDataHook(), undefined, content)}
         />
       </div>
     );
@@ -166,7 +165,7 @@ describe('Popups', () => {
 
     driver.when.inGivenComponent.clickOn(buttonOpen);
 
-    expect(driver.get.testPopup1().content()).toBe(content);
+    expect(driver.get.popupDriver(generateDataHook()).get.content()).toBe(content);
   });
 
   it('should have as many popups open in a time', () => {
@@ -174,11 +173,11 @@ describe('Popups', () => {
       <div>
         <button
           data-hook="button-open"
-          onClick={() => props.popupManager.openTestPopup1()}
+          onClick={() => props.popupManager.openTestPopup(generateDataHook())}
         />
         <button
           data-hook="button-open2"
-          onClick={() => props.popupManager.openTestPopup2()}
+          onClick={() => props.popupManager.openTestPopup(generateDataHook(1))}
         />
       </div>
     );
@@ -189,8 +188,8 @@ describe('Popups', () => {
 
     driver.when.inGivenComponent.clickOn(buttonOpen);
     driver.when.inGivenComponent.clickOn('button-open2');
-    expect(driver.get.testPopup1().exists()).toBe(true);
-    expect(driver.get.testPopup2().exists()).toBe(true);
+    expect(driver.get.popupDriver(generateDataHook()).get.exists()).toBe(true);
+    expect(driver.get.popupDriver(generateDataHook(1)).get.exists()).toBe(true);
   });
 
   it('should allow close all popups', () => {
@@ -198,11 +197,11 @@ describe('Popups', () => {
       <div>
         <button
           data-hook="button-open"
-          onClick={() => props.popupManager.openTestPopup1()}
+          onClick={() => props.popupManager.openTestPopup(generateDataHook())}
         />
         <button
           data-hook="button-open2"
-          onClick={() => props.popupManager.openTestPopup2()}
+          onClick={() => props.popupManager.openTestPopup(generateDataHook(1))}
         />
         <button
           data-hook="button-close-all"
@@ -217,37 +216,10 @@ describe('Popups', () => {
 
     driver.when.inGivenComponent.clickOn(buttonOpen);
     driver.when.inGivenComponent.clickOn('button-open2');
-    expect(driver.get.testPopup1().exists()).toBe(true);
-    expect(driver.get.testPopup2().exists()).toBe(true);
+    expect(driver.get.popupDriver(generateDataHook()).get.exists()).toBe(true);
+    expect(driver.get.popupDriver(generateDataHook(1)).get.exists()).toBe(true);
     driver.when.inGivenComponent.clickOn('button-close-all');
-    expect(driver.get.testPopup1().exists()).toBe(false);
-    expect(driver.get.testPopup2().exists()).toBe(false);
-  });
-
-  fit('should close popup using isOpen - allow animation', () => {
-    const testedComponent = (props:{popupManager: PopupManager})  => (
-      <div>
-        <button
-          data-hook="button-open"
-          onClick={() => props.popupManager.open(TestPopupWithAnimation, {
-            onClose: () => console.log('popup was closed'),
-            timeOutMS: 100,
-            isOpen: true,
-          })}
-        />
-      </div>
-    );
-
-    driver.given.component(testedComponent);
-
-    driver.when.create();
-
-    expect(driver.get.isPopupOpen()).toBe(false);
-    driver.when.inGivenComponent.clickOn(buttonOpen);
-    driver.when.testPopupWithAnimation.closePopup();
-
-    expect(driver.get.testPopupWithAnimation().exists()).toBe(true);
-    jest.advanceTimersByTime(100);
-    expect(driver.get.testPopupWithAnimation().exists()).toBe(false);
+    expect(driver.get.popupDriver(generateDataHook()).get.exists()).toBe(false);
+    expect(driver.get.popupDriver(generateDataHook(1)).get.exists()).toBe(false);
   });
 });

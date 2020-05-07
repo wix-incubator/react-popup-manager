@@ -7,7 +7,7 @@ export interface PopupsWrapperProps {
 
 interface SinglePopupLifeCycleProps {
   currentPopup: PopupItem;
-  onClose(currentPopup: PopupItem, ...params): any;
+  onClose(params: any[]): any;
   isOpen: boolean;
 }
 
@@ -21,7 +21,7 @@ class SinglePopupLifeCycle extends React.Component<SinglePopupLifeCycleProps> {
   }
 
   componentWillReceiveProps(
-    nextProps: Readonly<SinglePopupLifeCycleProps>,
+    nextProps: Readonly <SinglePopupLifeCycleProps>,
     nextContext: any,
   ): void {
     if (nextProps.isOpen === false) {
@@ -36,7 +36,7 @@ class SinglePopupLifeCycle extends React.Component<SinglePopupLifeCycleProps> {
       <currentPopup.ComponentClass
         {...currentPopup.props}
         isOpen={this.state.isOpen}
-        onClose={(...params) => onClose(currentPopup, params)}
+        onClose={(...params) => onClose(params)}
       />
     );
   }
@@ -63,7 +63,7 @@ export class PopupsWrapper extends React.Component<PopupsWrapperProps> {
         currentPopup={currentPopup}
         key={currentPopup.guid}
         isOpen={true}
-        onClose={(...params) => this.onClose(currentPopup, params)}
+        onClose={(params) => this.onClose(currentPopup, params)}
       />
     ));
   }

@@ -1,6 +1,10 @@
 import { PopupManager } from './popupManager';
 
-export interface PopupProps {
+export interface PopupAcceptedProps {
+  onClose?(...params): any;
+}
+
+export interface PopupProps extends PopupAcceptedProps{
   onClose?(...params): any;
   isOpen?: boolean;
 }
