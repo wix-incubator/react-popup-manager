@@ -2,28 +2,71 @@ import * as React from 'react';
 import { generateGuid } from './utils/generateGuid';
 import { PopupAcceptedProps } from './popupsDef';
 
-export interface PopupItem {
-  ComponentClass: any;
-  props: PopupAcceptedProps & { [key: string]: any };
-  guid: string;
-}
-
 export interface popupInstance {
   close: Function;
 }
 
-type OpenPopupOptions<T> =  T & PopupAcceptedProps;
+type OpenPopupOptions<T> = T & PopupAcceptedProps;
+
+type PopupItemProps = PopupAcceptedProps & { [key: string]: any };
+
+const CLOSED_POPUPS_THRESHOLD = 10;
+
+export class PopupItem {
+  private _isOpen: boolean;
+
+  constructor(
+    public ComponentClass: any,
+    public props: PopupItemProps,
+    public guid: string,
+  ) {
+    this._isOpen = false;
+  }
+
+  public get isOpen() {
+    return this._isOpen;
+  }
+
+  public close() {
+    this._isOpen = false;
+  }
+}
 
 export class PopupManager {
-  public openPopups: PopupItem[] = [];
+  private _openPopups: PopupItem[] = [];
+  private _closedPopups: PopupItem[] = [];
+  private readonly withIsOpen: boolean = false;
   public onPopupsChangeEvents: Function[] = [];
+
+  constructor(options: { withIsOpen?: boolean } = {}) {
+    this.withIsOpen = options.withIsOpen;
+  }
 
   private callPopupsChangeEvents() {
     this.onPopupsChangeEvents.forEach(cb => cb());
   }
 
+  private get closedPopups() {
+    this._closedPopups.length = Math.min(
+      this._closedPopups.length,
+      CLOSED_POPUPS_THRESHOLD,
+    );
+    return this._closedPopups;
+  }
+
   public subscribeOnPopupsChange(callback: Function): void {
     this.onPopupsChangeEvents.push(callback);
+  }
+
+  /* @deprecated: use popups instead*/
+  public openPopups = this.popups;
+
+  public get popups() {
+    if (this.withIsOpen) {
+      return [...this._openPopups, ...this.closedPopups];
+    }
+
+    return this._openPopups;
   }
 
   public open<T>(
@@ -31,21 +74,17 @@ export class PopupManager {
     popupProps?: OpenPopupOptions<T>,
   ): popupInstance {
     const guid = generateGuid();
-    this.openPopups.push({
-      ComponentClass: componentClass,
-      props: popupProps as any,
-      guid,
-    });
+    const newPopupItem = new PopupItem(componentClass, popupProps as any, guid);
+    this._openPopups.push(newPopupItem);
 
     this.callPopupsChangeEvents();
-
     return {
       close: () => this.close(guid),
     };
   }
 
   public close(popupGuid: string): void {
-    const currentPopupIndex = this.openPopups.findIndex(
+    const currentPopupIndex = this._openPopups.findIndex(
       ({ guid }) => guid === popupGuid,
     );
 
@@ -53,12 +92,18 @@ export class PopupManager {
       return;
     }
 
-    this.openPopups.splice(currentPopupIndex, 1);
+    const currentPopup = this._openPopups[currentPopupIndex];
+
+    currentPopup.close();
+
+    const closedPopup = this._openPopups.splice(currentPopupIndex, 1)[0];
+    this._closedPopups.unshift(closedPopup);
     this.callPopupsChangeEvents();
   }
 
   public closeAll(): void {
-    this.openPopups = [];
+    this._closedPopups = [...this._openPopups.reverse(), ...this._closedPopups];
+    this._openPopups = [];
     this.callPopupsChangeEvents();
   }
 }

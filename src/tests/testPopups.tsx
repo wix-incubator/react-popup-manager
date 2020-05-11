@@ -2,8 +2,8 @@ import * as React from 'react';
 import {PopupProps} from '../popupsDef';
 
 interface TestPopupProps extends PopupProps {
-  content: string;
-  dataHook: string;
+  content?: string;
+  dataHook?: string;
 }
 export const TestPopup = (props: TestPopupProps) => (
   <div data-hook={props.dataHook}>
