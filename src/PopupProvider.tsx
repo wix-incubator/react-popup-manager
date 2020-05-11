@@ -14,7 +14,8 @@ export class PopupProvider extends React.Component<PopupsProviderProps> {
   constructor(props, context) {
     super(props, context);
     this.popupManager =
-      props.popupManager || new PopupManager({ withIsOpen: props.withIsOpen });
+      props.popupManager || new PopupManager();
+      props.popupManager.withIsOpen = props.withIsOpen;
   }
 
   public render() {

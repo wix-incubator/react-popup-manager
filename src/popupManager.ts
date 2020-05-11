@@ -20,7 +20,7 @@ export class PopupItem {
     public props: PopupItemProps,
     public guid: string,
   ) {
-    this._isOpen = false;
+    this._isOpen = true;
   }
 
   public get isOpen() {
@@ -32,15 +32,11 @@ export class PopupItem {
   }
 }
 
-export class PopupManager {
+export class PopupManagerInternal {
   private _openPopups: PopupItem[] = [];
   private _closedPopups: PopupItem[] = [];
   private readonly withIsOpen: boolean = false;
   public onPopupsChangeEvents: Function[] = [];
-
-  constructor(options: { withIsOpen?: boolean } = {}) {
-    this.withIsOpen = options.withIsOpen;
-  }
 
   private callPopupsChangeEvents() {
     this.onPopupsChangeEvents.forEach(cb => cb());
@@ -107,3 +103,20 @@ export class PopupManager {
     this.callPopupsChangeEvents();
   }
 }
+
+
+type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
+
+// fake type - just an idea
+type Deprecated<T> = {
+  /* @deprecated: is for internal usage only */
+  [P in keyof T]: T[P];
+};
+
+type IPopupManager = Pick<PopupManagerInternal, "open" | "closeAll"> & Deprecated<Omit<PopupManagerInternal, "open" | "closeAll">> ;
+
+const PopupManager: IPopupManager  = <any>PopupManagerInternal;
+
+const d = new PopupManager();
+d.withIsOpen;
+d.close('');

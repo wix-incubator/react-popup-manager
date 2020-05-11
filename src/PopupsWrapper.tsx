@@ -15,7 +15,7 @@ class SinglePopupLifeCycle extends React.Component<SinglePopupLifeCycleProps> {
   state = { isOpen: false };
 
   componentDidMount(): void {
-    if (this.props.isOpen === false) {
+    if (this.props.isOpen === true) {
       this.setState({ isOpen: true });
     }
   }
