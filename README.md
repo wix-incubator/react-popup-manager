@@ -30,7 +30,7 @@ import { PopupProvider } from "react-popup-manager";
 import { Main } from "./Main";
 
 ReactDOM.render(
-  <PopupProvider>
+  <PopupProvider withIsOpen={true}>
     <Main />
   </PopupProvider>,
   document.getElementById("root")
@@ -67,8 +67,10 @@ export class MyModal extends React.Component {
     }
 
     render() {
+        const { isOpen } = this.props;
+
         return (
-            <Modal isOpen={true} >
+            <Modal isOpen={isOpen} >
                <span>{this.props.title}</span>
                <button onClick={() => this.close()}> close </button>
              </Modal>
@@ -88,6 +90,9 @@ The library is agnostic to any popup library you decide to use.
 `props`:
 * `popupManager` <i>(optional)</i> - Popup Manager. can send custom extended `PopupManager`. <br>
  <i>~ Default : uses `PopupManager`</i>
+ * `withIsOpen` <i>(optional)</i> - **Fixes** open and close transitions of popups.<br>
+   Adds managing of `IsOpen` for opened popup. <br>
+   <i>~ Default : `false`</i>
 
 ### `withPopups(managerName)`
 HOC that adds `popupManager` to `props` of component
