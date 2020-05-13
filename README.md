@@ -90,7 +90,7 @@ The library is agnostic to any popup library you decide to use.
 `props`:
 * `popupManager` <i>(optional)</i> - Popup Manager. can send custom extended `PopupManager`. <br>
  <i>~ Default : uses `PopupManager`</i>
- * `withIsOpen` <i>(optional)</i> - **Fixes** open and close transitions of popups.<br>
+ * `withIsOpen` <i>(optional but **Recommended**)</i> - **Fixes** open and close transitions of popups.<br>
    Adds managing of `IsOpen` for opened popup. <br>
    <i>~ Default : `false`</i>
 
@@ -107,6 +107,7 @@ HOC that adds `popupManager` to `props` of component
 * `componentClass` - component's class or function
 * `popupProps` <i>(optional)</i> - popup's props.
     * `onClose` - will be called on actual popup close with arguments
+     > `isOpen` shouldn't be used!
 * returns - object of open popup
     * `close` - closes the popup
 

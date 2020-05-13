@@ -22,10 +22,12 @@ to get the upgrade features that fix the animation issue you need to use these:
   >:warning:&nbsp;**Important** - &nbsp;only use with new `withIsOpen` prop above
 
 ### Deprecated
-- `PopupManager.openPopups`  - for internal use only. will be removed in the future.
-- `PopupManager.onPopupsChangeEvents`  - for internal use  only. will be removed in the future.
-- `PopupManager.subscribeOnPopupsChange`  - for internal use  only. will be removed in the future.
-- `PopupManager.close`  - for internal use  only. will be removed in the future.
+- `popupProps.isOpen` in `PopupManager.open(component, popupProps)`  - is not allowed. is saved for internal use.
+  >:warning:&nbsp;**Important** - &nbsp; will throw exception if adding `withIsOpen` to `PopupProvider`
+- `PopupManager.openPopups`  - for internal use only and will be removed in the future.
+- `PopupManager.onPopupsChangeEvents`  - for internal use  only and will be removed in the future.
+- `PopupManager.subscribeOnPopupsChange`  - for internal use  only and will be removed in the future.
+- `PopupManager.close`  - for internal use  only and will be removed in the future.
 
 
 
