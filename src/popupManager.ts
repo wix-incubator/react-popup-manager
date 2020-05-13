@@ -1,11 +1,14 @@
 import * as React from 'react';
 import {
-  deprecatedWarningMessage,
   OpenPopupOptions,
   PopupManagerInternal,
 } from './__internal__/popupManagerInternal';
 import { PopupItem } from './__internal__/PopupItem';
 import { popupInstance } from './popupsDef';
+import {
+  deprecatedPropWarningMessage,
+  deprecatedWarningMessage,
+} from './__internal__/common';
 
 interface IPopupManagerDeprecated {
   open<T>(
@@ -32,8 +35,22 @@ function deprecated(functionName) {
   console.warn(deprecatedWarningMessage(functionName));
 }
 
+function deprecatedProp(propName) {
+  console.warn(deprecatedPropWarningMessage(propName));
+}
+
 class PopupManagerDeprecated extends PopupManagerInternal
   implements IPopupManagerDeprecated {
+  public open<T>(
+    componentClass: React.ComponentType<T>,
+    popupProps?: OpenPopupOptions<T>,
+  ): popupInstance {
+    if ((popupProps as any).isOpen) {
+      deprecatedProp('isOpen');
+    }
+    return super.open(componentClass, popupProps);
+  }
+
   public get openPopups() {
     deprecated('openPopups');
     return this.popups;

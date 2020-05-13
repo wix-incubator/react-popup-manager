@@ -6,9 +6,6 @@ const CLOSED_POPUPS_THRESHOLD = 10;
 
 export type OpenPopupOptions<T> = T & PopupAcceptedProps;
 
-export const deprecatedWarningMessage = functionName =>
-  `'${functionName}' is deprecated. this is for internal use only and will be removed in future versions`;
-
 export class PopupManagerInternal {
   private _openPopups: PopupItem[] = [];
   private readonly _closedPopups: PopupItem[] = [];
@@ -43,6 +40,12 @@ export class PopupManagerInternal {
     componentClass: React.ComponentType<T>,
     popupProps?: OpenPopupOptions<T>,
   ): popupInstance {
+    if ((popupProps as any).isOpen && this.withIsOpen) {
+      throw new Error(
+        `'isOpen' prop is deprecated and not allowed. if you wish to use it, remove 'withIsOpen' from 'PopupProvider'`,
+      );
+    }
+
     const guid = generateGuid();
     const newPopupItem = new PopupItem(componentClass, popupProps as any, guid);
     this._openPopups.push(newPopupItem);

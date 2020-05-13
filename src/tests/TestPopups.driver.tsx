@@ -4,7 +4,6 @@ import {withPopups, PopupManager, PopupProvider} from '..';
 import {PopupsDriver} from '../Popups.driver';
 import * as Adapter from 'enzyme-adapter-react-16';
 
-
 export class PopupDriver {
   constructor(private component: ReactWrapper<any>) {
   }
@@ -77,6 +76,7 @@ export class TestPopupsDriver {
 
   public when = {
     create: (): TestPopupsDriver => {
+      this.componentType = this.componentType ? this.componentType : () => <div></div>;
       this.component = this.render(props => {
         const ComponentWithPopupManager = withPopups(this.popupManagerName)(
           _props1 => <this.componentType {..._props1} />,
