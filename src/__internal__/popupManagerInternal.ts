@@ -6,18 +6,17 @@ const CLOSED_POPUPS_THRESHOLD = 10;
 
 export type OpenPopupOptions<T> = T & PopupAcceptedProps;
 
+export const deprecatedWarningMessage = functionName =>
+  `'${functionName}' is deprecated. this is for internal use only and will be removed in future versions`;
+
 export class PopupManagerInternal {
   private _openPopups: PopupItem[] = [];
   private readonly _closedPopups: PopupItem[] = [];
   public withIsOpen: boolean = false;
-  protected _onPopupsChangeEvents: Function[] = [];
-
-  public get onPopupsChangeEvents() {
-    return this._onPopupsChangeEvents;
-  }
+  public _onPopupsChangeEvents: Function[] = [];
 
   private callPopupsChangeEvents() {
-    this.onPopupsChangeEvents.forEach(cb => cb());
+    this._onPopupsChangeEvents.forEach(cb => cb());
   }
 
   private get closedPopups() {
@@ -28,8 +27,8 @@ export class PopupManagerInternal {
     return this._closedPopups;
   }
 
-  public subscribeOnPopupsChange(callback: Function): void {
-    this.onPopupsChangeEvents.push(callback);
+  public _subscribeOnPopupsChange(callback: Function): void {
+    this._onPopupsChangeEvents.push(callback);
   }
 
   public get popups() {
@@ -50,11 +49,11 @@ export class PopupManagerInternal {
 
     this.callPopupsChangeEvents();
     return {
-      close: () => this.close(guid),
+      close: () => this._close(guid),
     };
   }
 
-  public close(popupGuid: string): void {
+  public _close(popupGuid: string): void {
     const currentPopupIndex = this._openPopups.findIndex(
       ({ guid }) => guid === popupGuid,
     );

@@ -48,11 +48,11 @@ class SinglePopupLifeCycle extends React.Component<SinglePopupLifeCycleProps> {
 export class PopupsWrapper extends React.Component<PopupsWrapperProps> {
   constructor(props) {
     super(props);
-    props.popupManager.subscribeOnPopupsChange(() => this.forceUpdate());
+    props.popupManager._subscribeOnPopupsChange(() => this.forceUpdate());
   }
 
   private onClose(currentPopup: PopupItem, params) {
-    this.props.popupManager.close(currentPopup.guid);
+    this.props.popupManager._close(currentPopup.guid);
     currentPopup.props &&
       currentPopup.props.onClose &&
       currentPopup.props.onClose(...params);

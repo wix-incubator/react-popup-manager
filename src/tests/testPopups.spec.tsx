@@ -3,6 +3,7 @@ import {TestPopupsManager} from './testPopupsManager';
 import * as React from 'react';
 import {TestPopup, TestPopupUsesIsOpen} from "./testPopups";
 import {PopupManager} from '../popupManager';
+import {deprecatedWarningMessage, PopupManagerInternal} from '../__internal__/popupManagerInternal';
 
 describe('Popups', () => {
   let driver: TestPopupsDriver;
@@ -12,7 +13,7 @@ describe('Popups', () => {
 
   beforeEach(() => {
     driver = new TestPopupsDriver();
-    popupManager = new TestPopupsManager('string');
+    popupManager = new TestPopupsManager();
   });
 
   it('should open popup using default popup manager', () => {
@@ -323,6 +324,66 @@ describe('Popups', () => {
       expect(driver.get.popupDriver(generateDataHook(0)).get.exists()).toBe(false);
       expect(driver.get.popupDriver(generateDataHook(1)).get.exists()).toBe(true);
       expect(driver.get.popupDriver(generateDataHook(1)).get.isOpen()).toBe(false);
+    });
+  });
+
+  describe('deprecations', () => {
+    it('should console.war on using deprecated message', () => {
+      console.warn = jest.fn();
+      const aPopupManager = new PopupManager();
+      const testedComponent = (props: { popupManager: PopupManager }) => (
+        <div>
+          <button
+            data-hook="button-open"
+            onClick={() => props.popupManager.open(TestPopupUsesIsOpen, {dataHook: generateDataHook()})}
+          />
+        </div>
+      );
+
+      driver
+        .given.withIsOpen(true)
+        .given.popupManager(aPopupManager)
+        .given.component(testedComponent).when.create();
+
+      // all should be strikethrough
+      aPopupManager.close('guid');
+      aPopupManager.onPopupsChangeEvents;
+      aPopupManager.openPopups;
+      aPopupManager.subscribeOnPopupsChange(() => ({}));
+
+      expect(console.warn).toBeCalledWith(deprecatedWarningMessage('close'));
+      expect(console.warn).toBeCalledWith(deprecatedWarningMessage('onPopupsChangeEvents'));
+      expect(console.warn).toBeCalledWith(deprecatedWarningMessage('openPopups'));
+      expect(console.warn).toBeCalledWith(deprecatedWarningMessage('subscribeOnPopupsChange'));
+    });
+
+    it('should NOT console.war on using deprecated message when it is PopupManager for Internal usage', () => {
+      console.warn = jest.fn();
+      const aPopupManager:PopupManagerInternal = new PopupManager() as any;
+      const testedComponent = (props: { popupManager: PopupManager }) => (
+        <div>
+          <button
+            data-hook="button-open"
+            onClick={() => props.popupManager.open(TestPopupUsesIsOpen, {dataHook: generateDataHook()})}
+          />
+        </div>
+      );
+
+      driver
+        .given.withIsOpen(true)
+        .given.popupManager(aPopupManager as any)
+        .given.component(testedComponent).when.create();
+
+      // all shouldn't be strikethrough
+      aPopupManager._close('guid');
+
+      // reading getters
+      const [] = aPopupManager._onPopupsChangeEvents;
+      const [] = aPopupManager.popups;
+      // aPopupManager.openPopups only exists in deprecated backwards compatibility
+      aPopupManager._subscribeOnPopupsChange(() => ({}));
+
+      expect(console.warn).not.toBeCalled();
     });
   });
 });

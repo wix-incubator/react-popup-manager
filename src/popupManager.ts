@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  deprecatedWarningMessage,
   OpenPopupOptions,
   PopupManagerInternal,
 } from './__internal__/popupManagerInternal';
@@ -7,7 +8,6 @@ import { PopupItem } from './__internal__/PopupItem';
 import { popupInstance } from './popupsDef';
 
 interface IPopupManagerDeprecated {
-
   open<T>(
     componentClass: React.ComponentType<T>,
     popupProps?: OpenPopupOptions<T>,
@@ -28,22 +28,30 @@ interface IPopupManagerDeprecated {
   subscribeOnPopupsChange(callback: Function): void;
 }
 
+function deprecated(functionName) {
+  console.warn(deprecatedWarningMessage(functionName));
+}
+
 class PopupManagerDeprecated extends PopupManagerInternal
   implements IPopupManagerDeprecated {
   public get openPopups() {
+    deprecated('openPopups');
     return this.popups;
   }
 
   public get onPopupsChangeEvents(): Function[] {
+    deprecated('onPopupsChangeEvents');
     return this._onPopupsChangeEvents;
   }
 
   public close(guid: string) {
-    return super.close(guid);
+    deprecated('close');
+    return super._close(guid);
   }
 
   public subscribeOnPopupsChange(callback: Function): void {
-    return super.subscribeOnPopupsChange(callback);
+    deprecated('subscribeOnPopupsChange');
+    return super._subscribeOnPopupsChange(callback);
   }
 }
 
