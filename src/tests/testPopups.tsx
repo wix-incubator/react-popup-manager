@@ -14,7 +14,7 @@ export const TestPopup = (props: TestPopupProps) => (
 
 
 export const TestPopupUsesIsOpen = (props: TestPopupProps) => (
-  <div is-open={props.isOpen} data-hook={props.dataHook}>
+  <div data-is-open={props.isOpen} data-hook={props.dataHook}>
     <span data-hook="popup-content">{props.content}</span>
     <button data-hook="close-button" onClick={() => props.onClose('value', true, 1)}/>
   </div>

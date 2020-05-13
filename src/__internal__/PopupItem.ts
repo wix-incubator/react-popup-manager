@@ -1,9 +1,5 @@
 import { PopupAcceptedProps } from '../popupsDef';
 
-export interface popupInstance {
-  close: Function;
-}
-
 type PopupItemProps = PopupAcceptedProps & { [key: string]: any };
 
 export class PopupItem {

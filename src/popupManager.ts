@@ -3,9 +3,11 @@ import {
   OpenPopupOptions,
   PopupManagerInternal,
 } from './__internal__/popupManagerInternal';
-import { popupInstance, PopupItem } from './__internal__/PopupItem';
+import { PopupItem } from './__internal__/PopupItem';
+import { popupInstance } from './popupsDef';
 
 interface IPopupManagerDeprecated {
+
   open<T>(
     componentClass: React.ComponentType<T>,
     popupProps?: OpenPopupOptions<T>,
@@ -47,7 +49,5 @@ class PopupManagerDeprecated extends PopupManagerInternal
 
 type Constructable<T> = new (...args: []) => T;
 
-type IPopupManager = Constructable<IPopupManagerDeprecated>;
-
-export const PopupManager: IPopupManager = PopupManagerDeprecated as any;
-
+export type PopupManager = IPopupManagerDeprecated;
+export const PopupManager: Constructable<PopupManager> = PopupManagerDeprecated as any;

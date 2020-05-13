@@ -1,6 +1,6 @@
 import { generateGuid } from '../utils/generateGuid';
-import { PopupAcceptedProps } from '../popupsDef';
-import { popupInstance, PopupItem } from './PopupItem';
+import { PopupAcceptedProps, popupInstance } from '../popupsDef';
+import { PopupItem } from './PopupItem';
 
 const CLOSED_POPUPS_THRESHOLD = 10;
 
@@ -8,8 +8,8 @@ export type OpenPopupOptions<T> = T & PopupAcceptedProps;
 
 export class PopupManagerInternal {
   private _openPopups: PopupItem[] = [];
-  private _closedPopups: PopupItem[] = [];
-  private readonly withIsOpen: boolean = false;
+  private readonly _closedPopups: PopupItem[] = [];
+  public withIsOpen: boolean = false;
   protected _onPopupsChangeEvents: Function[] = [];
 
   public get onPopupsChangeEvents() {
@@ -73,7 +73,10 @@ export class PopupManagerInternal {
   }
 
   public closeAll(): void {
-    this._closedPopups = [...this._openPopups.reverse(), ...this._closedPopups];
+    this._openPopups.forEach(popup => {
+      popup.close();
+      this._closedPopups.unshift(popup);
+    });
     this._openPopups = [];
     this.callPopupsChangeEvents();
   }

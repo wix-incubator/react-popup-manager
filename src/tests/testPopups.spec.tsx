@@ -12,7 +12,7 @@ describe('Popups', () => {
 
   beforeEach(() => {
     driver = new TestPopupsDriver();
-    popupManager = new TestPopupsManager();
+    popupManager = new TestPopupsManager('string');
   });
 
   it('should open popup using default popup manager', () => {
@@ -296,7 +296,7 @@ describe('Popups', () => {
     });
 
     it('should close all popups. threshold 10. First Closed First Removed', () => {
-      const aPopupManager = new PopupManager({withIsOpen: true});
+      const aPopupManager = new PopupManager();
       const popupThreshold = 10;
       let popupDataHookIndex = 0;
       const testedComponent = (props: { popupManager: PopupManager }) => (
@@ -309,6 +309,7 @@ describe('Popups', () => {
       );
 
       driver
+        .given.withIsOpen(true)
         .given.popupManager(aPopupManager)
         .given.component(testedComponent).when.create();
 

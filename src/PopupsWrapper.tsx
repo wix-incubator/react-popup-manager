@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { PopupItem, PopupManager } from './popupManager';
+import { PopupItem } from './__internal__/PopupItem';
+import { PopupManagerInternal } from './__internal__/popupManagerInternal';
 
-export interface PopupsWrapperProps {
-  popupManager: PopupManager;
+interface PopupsWrapperProps {
+  popupManager: PopupManagerInternal;
 }
 
 interface SinglePopupLifeCycleProps {
@@ -20,13 +21,15 @@ class SinglePopupLifeCycle extends React.Component<SinglePopupLifeCycleProps> {
     }
   }
 
-  componentWillReceiveProps(
+  static getDerivedStateFromProps(
     nextProps: Readonly<SinglePopupLifeCycleProps>,
-    nextContext: any,
-  ): void {
+    prevState: any,
+  ): any {
     if (nextProps.isOpen === false) {
-      this.setState({ isOpen: false });
+      return { isOpen: false };
     }
+
+    return null;
   }
 
   render() {

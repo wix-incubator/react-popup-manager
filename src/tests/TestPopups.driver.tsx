@@ -25,7 +25,7 @@ export class PopupDriver {
 
   public get = {
     exists: () => this.component.exists(),
-    isOpen: () => this.component.props()['is-open'],
+    isOpen: () => this.component.props()['data-is-open'],
     closeButton: () => this.getByDataHook('close-button'),
     content: () => this.getByDataHook('popup-content').text(),
   }
