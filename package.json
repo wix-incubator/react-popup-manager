@@ -1,6 +1,6 @@
 {
   "name": "react-popup-manager",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Manage react popups, Modals, Lightboxes, Notifications, etc. easily",
   "license": "MIT",
   "private": false,
