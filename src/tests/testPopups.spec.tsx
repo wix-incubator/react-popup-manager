@@ -376,11 +376,8 @@ describe('Popups', () => {
 
       // all shouldn't be strikethrough
       aPopupManager._close('guid');
-
-      // reading getters
-      const [] = aPopupManager._onPopupsChangeEvents;
-      const [] = aPopupManager.popups;
-      // aPopupManager.openPopups only exists in deprecated backwards compatibility
+      aPopupManager._onPopupsChangeEvents;
+      aPopupManager.popups;
       aPopupManager._subscribeOnPopupsChange(() => ({}));
 
       expect(console.warn).not.toBeCalled();
