@@ -1,21 +1,13 @@
 import { generateGuid } from '../utils/generateGuid';
 import { popupInstance, PopupProps } from '../popupsDef';
 import { PopupItem } from './PopupItem';
+import { PopupManager } from '../popupManager';
 
 const CLOSED_POPUPS_THRESHOLD = 10;
 
 export type OpenPopupOptions<T> = Omit<T & PopupProps, 'isOpen'>;
 
-export interface IPopupManager {
-  open<T>(
-    componentClass: React.ComponentType<T>,
-    popupProps?: OpenPopupOptions<T>,
-  ): popupInstance;
-
-  closeAll(): void;
-}
-
-export class PopupManagerInternal implements IPopupManager {
+export class PopupManagerInternal implements PopupManager {
   private openPopups: PopupItem[] = [];
   private readonly _closedPopups: PopupItem[] = [];
   public onPopupsChangeEvents: Function[] = [];

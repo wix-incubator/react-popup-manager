@@ -5,7 +5,7 @@ export interface popupInstance {
 }
 
 export interface PopupProps {
-  onClose?(...params): any;
+  onClose?: (...args: any[]) => any;
   isOpen?: boolean;
 }
 
