@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Transitions on show and hide were fixed! <br>
   There was an issue with the current approach to show and hide popups.<br>
-  It added and removed dom elements, preventing the in-code transition solution of external popup-libraries.
-  <i>for example: instead of fade out, it use to just disappear</i>
+  It added and removed dom elements, preventing the in-code transition solution of external popup-libraries.<br>
+  ><i>for example: instead of fade out, it use to just disappear</i>
 ### Changed
 - Changed `PopupManager` `close` approach:<br>
   Instead of adding and removing it from the DOM, it changes popup's `isOpen` prop.<br>
