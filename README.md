@@ -102,7 +102,7 @@ HOC that adds `popupManager` to `props` of component
 ### `PopupManager`
 `open(componentClass, popupProps)` - opens popup. render's popup component
 * `componentClass` - component's class or function
-* `popupProps` <i>(optional)</i> - consumers popup props and also accepts these:
+* `popupProps` <i>(optional)</i> - consumer's popup props and also accepts these:
     * `onClose` - will be called on actual popup close with arguments
      > `isOpen` is not allowed.
 * returns - object of instance of open popup
