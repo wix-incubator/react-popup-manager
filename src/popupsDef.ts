@@ -4,11 +4,7 @@ export interface popupInstance {
   close: Function;
 }
 
-export interface PopupAcceptedProps {
-  onClose?(...params): any;
-}
-
-export interface PopupProps extends PopupAcceptedProps {
+export interface PopupProps {
   onClose?(...params): any;
   isOpen?: boolean;
 }

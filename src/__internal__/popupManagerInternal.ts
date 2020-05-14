@@ -1,19 +1,27 @@
 import { generateGuid } from '../utils/generateGuid';
-import { PopupAcceptedProps, popupInstance } from '../popupsDef';
+import { popupInstance, PopupProps } from '../popupsDef';
 import { PopupItem } from './PopupItem';
 
 const CLOSED_POPUPS_THRESHOLD = 10;
 
-export type OpenPopupOptions<T> = T & PopupAcceptedProps;
+export type OpenPopupOptions<T> = Omit<T & PopupProps, 'isOpen'>;
 
-export class PopupManagerInternal {
-  private _openPopups: PopupItem[] = [];
+export interface IPopupManager {
+  open<T>(
+    componentClass: React.ComponentType<T>,
+    popupProps?: OpenPopupOptions<T>,
+  ): popupInstance;
+
+  closeAll(): void;
+}
+
+export class PopupManagerInternal implements IPopupManager {
+  private openPopups: PopupItem[] = [];
   private readonly _closedPopups: PopupItem[] = [];
-  public withIsOpen: boolean = false;
-  public _onPopupsChangeEvents: Function[] = [];
+  public onPopupsChangeEvents: Function[] = [];
 
   private callPopupsChangeEvents() {
-    this._onPopupsChangeEvents.forEach(cb => cb());
+    this.onPopupsChangeEvents.forEach(cb => cb());
   }
 
   private get closedPopups() {
@@ -24,40 +32,36 @@ export class PopupManagerInternal {
     return this._closedPopups;
   }
 
-  public _subscribeOnPopupsChange(callback: Function): void {
-    this._onPopupsChangeEvents.push(callback);
+  public subscribeOnPopupsChange(callback: Function): void {
+    this.onPopupsChangeEvents.push(callback);
   }
 
   public get popups() {
-    if (this.withIsOpen) {
-      return [...this._openPopups, ...this.closedPopups];
-    }
-
-    return this._openPopups;
+    return [...this.openPopups, ...this.closedPopups];
   }
 
   public open<T>(
     componentClass: React.ComponentType<T>,
     popupProps?: OpenPopupOptions<T>,
   ): popupInstance {
-    if ((popupProps as any).isOpen && this.withIsOpen) {
+    if (popupProps && (popupProps as any).isOpen !== undefined) {
       throw new Error(
-        `'isOpen' prop is deprecated and not allowed. if you wish to use it, remove 'withIsOpen' from 'PopupProvider'`,
+        `it is not allowed to send 'isOpen' in popupProps to 'popupManager.open(component, popupProps)'`,
       );
     }
 
     const guid = generateGuid();
     const newPopupItem = new PopupItem(componentClass, popupProps as any, guid);
-    this._openPopups.push(newPopupItem);
+    this.openPopups.push(newPopupItem);
 
     this.callPopupsChangeEvents();
     return {
-      close: () => this._close(guid),
+      close: () => this.close(guid),
     };
   }
 
-  public _close(popupGuid: string): void {
-    const currentPopupIndex = this._openPopups.findIndex(
+  public close(popupGuid: string): void {
+    const currentPopupIndex = this.openPopups.findIndex(
       ({ guid }) => guid === popupGuid,
     );
 
@@ -65,21 +69,21 @@ export class PopupManagerInternal {
       return;
     }
 
-    const currentPopup = this._openPopups[currentPopupIndex];
+    const currentPopup = this.openPopups[currentPopupIndex];
 
     currentPopup.close();
 
-    const closedPopup = this._openPopups.splice(currentPopupIndex, 1)[0];
-    this._closedPopups.unshift(closedPopup);
+    const closedPopup = this.openPopups.splice(currentPopupIndex, 1)[0];
+    this.closedPopups.unshift(closedPopup);
     this.callPopupsChangeEvents();
   }
 
   public closeAll(): void {
-    this._openPopups.forEach(popup => {
+    this.openPopups.forEach(popup => {
       popup.close();
-      this._closedPopups.unshift(popup);
+      this.closedPopups.unshift(popup);
     });
-    this._openPopups = [];
+    this.openPopups = [];
     this.callPopupsChangeEvents();
   }
 }

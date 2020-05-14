@@ -1,6 +1,6 @@
-import { PopupAcceptedProps } from '../popupsDef';
+import { PopupProps } from '../popupsDef';
 
-type PopupItemProps = PopupAcceptedProps & { [key: string]: any };
+type PopupItemProps = PopupProps & { [key: string]: any };
 
 export class PopupItem {
   private _isOpen: boolean;

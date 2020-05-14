@@ -1,6 +1,6 @@
 {
   "name": "react-popup-manager",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Manage react popups, Modals, Lightboxes, Notifications, etc. easily",
   "license": "MIT",
   "private": false,
@@ -55,7 +55,7 @@
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-test-renderer": "^16.8.3",
-    "typescript": "~3.0.1",
+    "typescript": "~3.5.0",
     "yoshi": "^3.0.0"
   },
   "lint-staged": {

@@ -33,7 +33,6 @@ export class PopupDriver {
 export class TestPopupsDriver {
   private componentType: React.ComponentType;
   private popupManager: PopupManager;
-  private withIsOpen: boolean;
   private popupManagerName: string;
   private component: ReactWrapper<any>;
   private readonly props = {};
@@ -59,10 +58,6 @@ export class TestPopupsDriver {
   }
 
   public given = {
-    withIsOpen: (withIsOpen: boolean): TestPopupsDriver  => {
-      this.withIsOpen = withIsOpen;
-      return this;
-    },
     popupManager: (popupManager: PopupManager, customName?: string): TestPopupsDriver => {
       this.popupManager = popupManager;
       this.popupManagerName = customName;
@@ -85,7 +80,6 @@ export class TestPopupsDriver {
         return (
           <PopupProvider
             {...(this.popupManager ? {popupManager: this.popupManager} : null)}
-            {...(this.withIsOpen ? {withIsOpen: true} : null)}
           >
             <ComponentWithPopupManager {...props} />
           </PopupProvider>

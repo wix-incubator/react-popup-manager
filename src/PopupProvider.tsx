@@ -7,7 +7,6 @@ import { PopupManagerInternal } from './__internal__/popupManagerInternal';
 
 export interface PopupsProviderProps {
   popupManager?: PopupManager;
-  withIsOpen?: boolean;
   children?: any;
 }
 
@@ -16,7 +15,6 @@ export class PopupProvider extends React.Component<PopupsProviderProps> {
   constructor(props, context) {
     super(props, context);
     this.popupManager = props.popupManager || new PopupManager();
-    this.popupManager.withIsOpen = props.withIsOpen;
   }
 
   public render() {
