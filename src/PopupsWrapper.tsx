@@ -1,8 +1,48 @@
 import * as React from 'react';
-import { PopupItem, PopupManager } from './popupManager';
+import { PopupItem } from './__internal__/PopupItem';
+import { PopupManagerInternal } from './__internal__/popupManagerInternal';
 
-export interface PopupsWrapperProps {
-  popupManager: PopupManager;
+interface PopupsWrapperProps {
+  popupManager: PopupManagerInternal;
+}
+
+interface SinglePopupLifeCycleProps {
+  currentPopup: PopupItem;
+  onClose(params: any[]): any;
+  isOpen: boolean;
+}
+
+class SinglePopupLifeCycle extends React.Component<SinglePopupLifeCycleProps> {
+  state = { isOpen: false };
+
+  componentDidMount(): void {
+    if (this.props.isOpen === true) {
+      this.setState({ isOpen: true });
+    }
+  }
+
+  static getDerivedStateFromProps(
+    nextProps: Readonly<SinglePopupLifeCycleProps>,
+    prevState: any,
+  ): any {
+    if (nextProps.isOpen === false) {
+      return { isOpen: false };
+    }
+
+    return null;
+  }
+
+  render() {
+    const { currentPopup, onClose } = this.props;
+
+    return (
+      <currentPopup.ComponentClass
+        isOpen={this.state.isOpen}
+        {...currentPopup.props}
+        onClose={(...params) => onClose(params)}
+      />
+    );
+  }
 }
 
 export class PopupsWrapper extends React.Component<PopupsWrapperProps> {
@@ -21,11 +61,12 @@ export class PopupsWrapper extends React.Component<PopupsWrapperProps> {
   public render() {
     const { popupManager } = this.props;
 
-    return popupManager.openPopups.map(currentPopup => (
-      <currentPopup.ComponentClass
-        {...currentPopup.props}
+    return popupManager.popups.map(currentPopup => (
+      <SinglePopupLifeCycle
+        currentPopup={currentPopup}
         key={currentPopup.guid}
-        onClose={(...params) => this.onClose(currentPopup, params)}
+        isOpen={currentPopup.isOpen}
+        onClose={params => this.onClose(currentPopup, params)}
       />
     ));
   }

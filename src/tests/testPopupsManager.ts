@@ -1,12 +1,9 @@
-import {popupInstance, PopupManager} from '../popupManager';
-import { TestPopup1, TestPopup2 } from './testPopups';
+import {PopupManager} from '../popupManager';
+import { TestPopupUsesIsOpen  } from './testPopups';
+import {popupInstance} from '../popupsDef';
 
 export class TestPopupsManager extends PopupManager {
-  public openTestPopup1(onClose?: () => void, content?: string): popupInstance {
-    return this.open(TestPopup1, { onClose, content });
-  }
-
-  public openTestPopup2(): popupInstance {
-    return this.open(TestPopup2);
+  public openTestPopup(dataHook: string, onClose?: () => void, content?: string): popupInstance {
+    return this.open(TestPopupUsesIsOpen, { onClose, content, dataHook });
   }
 }

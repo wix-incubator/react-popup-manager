@@ -67,8 +67,10 @@ export class MyModal extends React.Component {
     }
 
     render() {
+        const { isOpen } = this.props;
+
         return (
-            <Modal isOpen={true} >
+            <Modal isOpen={isOpen} >
                <span>{this.props.title}</span>
                <button onClick={() => this.close()}> close </button>
              </Modal>
@@ -100,9 +102,10 @@ HOC that adds `popupManager` to `props` of component
 ### `PopupManager`
 `open(componentClass, popupProps)` - opens popup. render's popup component
 * `componentClass` - component's class or function
-* `popupProps` <i>(optional)</i> - popup's props.
+* `popupProps` <i>(optional)</i> - consumers popup props and also accepts these:
     * `onClose` - will be called on actual popup close with arguments
-* returns - object of open popup
+     > `isOpen` is not allowed.
+* returns - object of instance of open popup
     * `close` - closes the popup
 
 `closeAll()` - closes all open popups. removes popup from DOM

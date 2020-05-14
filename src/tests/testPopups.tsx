@@ -1,23 +1,15 @@
 import * as React from 'react';
-import { PopupProps } from '../popupsDef';
+import {PopupProps} from '../popupsDef';
 
-interface TestPopup1Props extends PopupProps {
-    content: string;
+interface TestPopupProps extends PopupProps {
+  content?: string;
+  dataHook?: string;
 }
 
-interface TestPopup2Props extends PopupProps {
-    [s: string]: any;
-}
-
-export const TestPopup1 = (props: TestPopup2Props) => (
-  <div data-hook="test-hook">
+export const generateDataHook = (index = 0) => `test-popup-${index}`;
+export const TestPopupUsesIsOpen = (props: TestPopupProps) => (
+  <div data-is-open={props.isOpen} data-hook={props.dataHook || generateDataHook()}>
     <span data-hook="popup-content">{props.content}</span>
-    <button data-hook="close-button" onClick={() => props.onClose('value', true, 1)} />
-  </div>
-);
-
-export const TestPopup2 = (props: TestPopup1Props) => (
-  <div data-hook="test-hook2">
-    <button data-hook="close-button" onClick={() => props.onClose} />
+    <button data-hook="close-button" onClick={() => props.onClose('value', true, 1)}/>
   </div>
 );
