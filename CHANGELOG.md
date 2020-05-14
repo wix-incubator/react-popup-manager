@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [2.0.0] - 2020-05-14
 ### Fixed
 - Transitions on show and hide were fixed! <br>
-  There was an issue with the current approach to show and hide popups.<br>  
+  There was an issue with the current approach to show and hide popups.<br>
   It added and removed dom elements, preventing the in-code transition solution of external popup-libraries.
   <i>for example: instead of fade out, it use to just disappear</i>
 ### Changed
