@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file.
 - Changed `PopupManager` `close` approach:<br>
   Instead of adding and removing it from the DOM, it changes popup's `isOpen` prop.<br>
   This will allow in-library implemented transitions on `Open` and on `Close`.<br>
-  > there is a threshold of only 10 closed popups. so shouldn't hurt performance
+  > there is a threshold of closed popups.
 ### Added
 to get the upgrade features that fix the animation issue you need to use these:
 - `isOpen` - new `Prop` added to existing `PopupProps`. <br>
