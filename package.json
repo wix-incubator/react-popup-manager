@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": false,
   "publishConfig": {
+    "versionBumpStrategy": "patch",
     "registry": "https://registry.npmjs.org/"
   },
   "author": {
@@ -21,8 +22,7 @@
     "precommit": "lint-staged",
     "pretest": "yoshi build",
     "test": "yoshi test --jest",
-    "posttest": "yoshi lint",
-    "release": "yoshi release"
+    "posttest": "yoshi lint"
   },
   "repository": {
     "type": "git",
