@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.0.30] - 2021-04-05
 ### Added
-- usePopupManager - add support for react-hooks
+- `usePopupManager` - add support for react-hooks
 
 ## [2.0.0] - 2020-05-14
 ### Fixed
