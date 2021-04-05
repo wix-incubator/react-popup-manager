@@ -32,10 +32,10 @@ export class PopupManagerInternal implements PopupManager {
     return [...this.openPopups, ...this.closedPopups];
   }
 
-  public open<T>(
+  public open = <T>(
     componentClass: React.ComponentType<T>,
     popupProps?: OpenPopupOptions<T>,
-  ): popupInstance {
+  ): popupInstance => {
     if (popupProps && (popupProps as any).isOpen !== undefined) {
       throw new Error(
         `it is not allowed to send 'isOpen' in popupProps to 'popupManager.open(component, popupProps)'`,
@@ -50,7 +50,7 @@ export class PopupManagerInternal implements PopupManager {
     return {
       close: () => this.close(guid),
     };
-  }
+  };
 
   public close(popupGuid: string): void {
     const currentPopupIndex = this.openPopups.findIndex(
@@ -70,12 +70,12 @@ export class PopupManagerInternal implements PopupManager {
     this.callPopupsChangeEvents();
   }
 
-  public closeAll(): void {
+  public closeAll = (): void => {
     this.openPopups.forEach(popup => {
       popup.close();
       this.closedPopups.unshift(popup);
     });
     this.openPopups = [];
     this.callPopupsChangeEvents();
-  }
+  };
 }

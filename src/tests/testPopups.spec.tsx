@@ -3,6 +3,7 @@ import {TestPopupsManager} from './testPopupsManager';
 import * as React from 'react';
 import {generateDataHook, TestPopupUsesIsOpen} from "./testPopups";
 import {PopupManager} from '../popupManager';
+import {usePopupManager} from '../usePopupManager';
 
 describe('Popups', () => {
   let driver: TestPopupsDriver;
@@ -203,6 +204,53 @@ describe('Popups', () => {
         expect(e.message).toBe(`it is not allowed to send 'isOpen' in popupProps to 'popupManager.open(component, popupProps)'`);
         done();
       }
+    });
+  });
+
+  describe('Using React Hooks', () => {
+    it('should open popup using default popup manager', () => {
+      const testedComponent = () => {
+        const {open} = usePopupManager();
+        return (<div>
+          <button
+              data-hook="button-open"
+              onClick={() => open(TestPopupUsesIsOpen)}
+          />
+        </div>);
+      };
+
+      justBeforeEachTest({component: testedComponent});
+
+      expect(driver.get.isPopupOpen()).toBe(false);
+      driver.when.inGivenComponent.clickOn(buttonOpen);
+
+      expect(driver.get.isPopupOpen()).toBe(true);
+      expect(driver.get.popupDriver(generateDataHook()).get.exists()).toBe(true);
+    });
+
+    it('should close all popups using popup manager', () => {
+      const testedComponent = () => {
+        const {open, closeAll} = usePopupManager();
+        return (<div>
+          <button
+              data-hook="button-open"
+              onClick={() => open(TestPopupUsesIsOpen)}
+          />
+          <button
+              data-hook="button-closeAll"
+              onClick={() => closeAll()}
+          />
+        </div>);
+      };
+
+      justBeforeEachTest({component: testedComponent});
+
+      driver.when.inGivenComponent.clickOn(buttonOpen);
+      expect(driver.get.isPopupOpen()).toBe(true);
+      expect(driver.get.popupDriver(generateDataHook()).get.isOpen()).toBe(true);
+
+      driver.when.inGivenComponent.clickOn('button-closeAll');
+      expect(driver.get.popupDriver(generateDataHook()).get.isOpen()).toBe(false);
     });
   });
 });
