@@ -84,6 +84,33 @@ The library is agnostic to any popup library you decide to use.
 <br>
 ~ in this example we used `react-modal`
 
+### Hooks.
+The library also supports react-hooks
+```
+// mainWithHooks.jsx
+import React from "react";
+import { usePopupManager } from "react-popup-manager";
+import { MyModal } from './MyModal'
+
+export const Main = () => {
+  const {open, closeAll} = usePopupManager();
+  const openModal = () => {
+    open(MyModal, {title: 'my modal', onClose: (...params) => console.log('modal has closed with:', ...params)}); // modal has closed with: param param2 param3
+  }
+  return (
+      <div>
+        <button onClick={() => openModal()}>
+          open modal
+        </button>
+        <button onClick={() => closeAll()}>
+          close all modals
+        </button>
+      </div>
+  );
+}
+
+```
+
 ## API
 
 ### `PopupProvider`
@@ -98,6 +125,9 @@ HOC that adds `popupManager` to `props` of component
 * `managerName` <i>(optional)</i> - set manager name that will be added to props.
 
 <i>~ Default : uses `popupManager`</i>
+
+### `usePopupManager`
+react hook that returns `popupManager`
 
 ### `PopupManager`
 `open(componentClass, popupProps)` - opens popup. render's popup component
