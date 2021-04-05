@@ -2,8 +2,8 @@ import {TestPopupsDriver} from './TestPopups.driver';
 import {TestPopupsManager} from './testPopupsManager';
 import * as React from 'react';
 import {generateDataHook, TestPopupUsesIsOpen} from "./testPopups";
-import {PopupManager} from '../popupManager';
-import {usePopupManager} from '../usePopupManager';
+import {PopupManager} from '../index';
+import {usePopupManager} from '../index';
 
 describe('Popups', () => {
   let driver: TestPopupsDriver;
