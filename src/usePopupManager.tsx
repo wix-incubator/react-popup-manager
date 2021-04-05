@@ -4,5 +4,10 @@ import { PopupContext } from './PopupContext';
 
 export function usePopupManager(): PopupManager {
   const { popupManager } = useContext(PopupContext);
-  return popupManager;
+  const { open, closeAll } = popupManager;
+
+  return {
+    open,
+    closeAll,
+  };
 }
