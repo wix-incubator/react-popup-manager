@@ -84,6 +84,7 @@ The library is agnostic to any popup library you decide to use.
 <br>
 ~ in this example we used `react-modal`
 
+
 ### hooks
 The library also supports react-hooks
 ```
