@@ -87,7 +87,7 @@ The library is agnostic to any popup library you decide to use.
 
 ### hooks
 The library also supports react-hooks
-```
+```jsx
 // mainWithHooks.jsx
 import React from "react";
 import { usePopupManager } from "react-popup-manager";
