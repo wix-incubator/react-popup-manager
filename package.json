@@ -3,6 +3,7 @@
   "version": "2.1.1",
   "description": "Manage react popups, Modals, Lightboxes, Notifications, etc. easily",
   "license": "MIT",
+  "main": "dist/src/index.js",
   "private": false,
   "publishConfig": {
     "versionBumpStrategy": "patch",
@@ -13,9 +14,7 @@
     "email": "guyw@wix.com"
   },
   "files": [
-    "dist/src",
-    "index.js",
-    "index.d.ts"
+    "dist/src"
   ],
   "scripts": {
     "start": "yoshi start",
