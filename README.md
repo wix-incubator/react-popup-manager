@@ -20,7 +20,7 @@ $ npm i --save react-popup-manager
 $ yarn add react-popup-manager
 ```
 
-### example
+### usage example
 Wrap the root of the app with `PopupProvider`
 
 ```jsx
@@ -98,7 +98,15 @@ The library is agnostic to any popup library you decide to use.
 <br>
 ~ in this example we used `react-modal`
 
-## USAGE
+## Before / After
+
+
+Before                     |  After
+:-------------------------:|:-------------------------:
+![](https://user-images.githubusercontent.com/11004313/152688557-044d96d5-5474-464c-9315-edfc36d5a572.png) | ![](https://user-images.githubusercontent.com/11004313/152688627-be0391a9-dd7b-4767-96d0-77f73c5b9216.png)
+
+
+## Usage
 
 ### `PopupProvider`
 `PopupProvider` is a `react context provider`. It needs to be rendered on the root of the app.
