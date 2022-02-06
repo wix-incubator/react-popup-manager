@@ -6,10 +6,19 @@ Manage react popups, Modals, Lightboxes, Notifications etc.
 An agnostic react provider that lets you handle opening and closing popups separately from you're Component `render` function.
 
 ## Why
-* no need to manage the `isOpen` state
-* no need to think where the `Component` should be written.
-* no need to have a component nested behind any inline conditional rendering
-* most important -  a single paradigm for handling popups, Modals, Lightboxes, Notifications etc. etc.
+* No need to manage the `isOpen` state
+* No need to think where the `Component` should be written.
+* No need to have a component nested behind any inline conditional rendering
+* Most important -  a single paradigm for handling popups, Modals, Lightboxes, Notifications etc. etc.
+<br>
+
+An example of how using this library will simplify your code
+
+The Old Way                     |  The react-popup-manager Way
+:-------------------------:|:-------------------------:
+![](https://user-images.githubusercontent.com/11004313/152688557-044d96d5-5474-464c-9315-edfc36d5a572.png) | ![](https://user-images.githubusercontent.com/11004313/152688627-be0391a9-dd7b-4767-96d0-77f73c5b9216.png)
+
+
 
 ## How
 
@@ -20,7 +29,9 @@ $ npm i --save react-popup-manager
 $ yarn add react-popup-manager
 ```
 
-### usage example
+### example
+Here is a simple example of how to use `react-popup-manager`
+<br><br>
 Wrap the root of the app with `PopupProvider`
 
 ```jsx
@@ -38,7 +49,7 @@ ReactDOM.render(
 );
 ```
 
-Use anywhere the hook `usePopupManager` to open a modal
+Use the hook `usePopupManager` to open a modal
 
 ```jsx
 // main.jsx
@@ -65,7 +76,7 @@ export const Main = () => {
 }
 ```
 
-The `MyModal` Component will recieve the sent `props` and will also have `isOpen` and `onClose` added by the `popupManager`.<br>
+The modal Component will recieve the sent `props` and will also have `isOpen` and `onClose` added by the `popupManager`.<br>
 `onClose` will trigger the `popupManager` to close the modal
 
 ```jsx
@@ -98,29 +109,21 @@ The library is agnostic to any popup library you decide to use.
 <br>
 ~ in this example we used `react-modal`
 
-## Before / After
-
-
-Before                     |  After
-:-------------------------:|:-------------------------:
-![](https://user-images.githubusercontent.com/11004313/152688557-044d96d5-5474-464c-9315-edfc36d5a572.png) | ![](https://user-images.githubusercontent.com/11004313/152688627-be0391a9-dd7b-4767-96d0-77f73c5b9216.png)
-
-
-## Usage
+## API
 
 ### `PopupProvider`
-`PopupProvider` is a `react context provider`. It needs to be rendered on the root of the app.
-It will provide the app with `popupManager`.
+A react context provider, should wrap the root of the app in order to provide the `popupManager`. <br>
 `props`:
 * `popupManager` <i>(optional)</i> - Custom Popup Manager. can send an extended `PopupManager`. <br>
  <i>~ Default : uses `PopupManager`</i>
 
 ### `usePopupManager`
-react hook that returns `popupManager`
+React hook that returns `popupManager`.
+For class components, check the `withPopups` HOC below
 
 ### `withPopups(managerName)`
-When using class components, hooks can't be use. <br>
-As an alternative, `withPopups` is an HOC that adds `popupManager` to the component's `props`
+An HOC that adds `popupManager` to the component's `props`.<br>
+Can be used as an alternative to `usePopupManager`.
 <br><br>
 `parameters`:
 * `managerName` <i>(optional)</i> - set manager name that will be added to props.
@@ -128,8 +131,8 @@ As an alternative, `withPopups` is an HOC that adds `popupManager` to the compon
 <i>~ Default : uses `popupManager`</i>
 
 ### `PopupManager`
-`PopupManager` is a singletone service that manages the state of the popups of the app.<br>
-`PopupManager` class can be extended for specific needs (for example: `showToast`, `openConfirmationDialog`)<br>
+A singletone service that manages the state of the popups of the app.<br>
+Can be extended for specific needs (<i>for example: `showToast`, `openConfirmationDialog`</i>)<br>
 If not extended, it has 2 methods:
 <br><br>
 `open(componentClass, popupProps)` - opens popup. render's popup component
@@ -140,4 +143,4 @@ If not extended, it has 2 methods:
 * returns - object of instance of open popup
     * `close` - closes the popup
 
-`closeAll()` - closes all open popups. removes popup from DOM
+`closeAll()` - closes all open popups.
