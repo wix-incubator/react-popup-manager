@@ -20,7 +20,8 @@ $ npm i --save react-popup-manager
 $ yarn add react-popup-manager
 ```
 
-### usage
+### example
+Wrap the root of the app with `PopupProvider`
 
 ```jsx
 // app.jsx
@@ -35,26 +36,39 @@ ReactDOM.render(
   </PopupProvider>,
   document.getElementById("root")
 );
+```
 
+Use anywhere the hook `usePopupManager` to open a modal
 
+```jsx
 // main.jsx
 import React from "react";
-import { withPopups } from "react-popup-manager";
+import { usePopupManager } from "react-popup-manager";
 import { MyModal } from './MyModal'
 
-class Main extends React.Component {
-  openModal() {
-    this.props.popupManager.open(MyModal, {title: 'my modal', onClose: (...params) => console.log('modal has closed with:', ...params)}); // modal has closed with: param param2 param3
+export const Main = () => {
+  const popupManager = usePopupManager();
+  const openModal = () => {
+    // open MyModal with it's needed `props` and an `onClose` callback function
+    popupManager.open(MyModal, {
+      title: 'my modal',
+      onClose: (...params) => console.log('modal has closed with:', ...params), // modal has closed with: param param2 param3
+    }); 
   }
-  render() {
-    return <button onClick={() => this.openModal()}> open modal </button>;
-  }
+  return (
+      <div>
+        <button onClick={() => openModal()}>
+          open modal
+        </button>
+      </div>
+  );
 }
+```
 
-const wrappedMain = withPopups()(Main); // adds 'popupManager' to props
-export {wrappedMain as Main};
+The `MyModal` Component will recieve the sent `props` and will also have `isOpen` and `onClose` added by the `popupManager`.<br>
+`onClose` will trigger the `popupManager` to close the modal
 
-
+```jsx
 // MyModal.jsx
 import React from 'react';
 import Modal from 'react-modal';
@@ -62,11 +76,12 @@ import Modal from 'react-modal';
 export class MyModal extends React.Component {
 
     close() {
-        // `onClose` is added by 'PopupManager' to props
+        // `onClose` will close the modal and will call the callback defined in main.jsx
         this.props.onClose('param', 'param2', 'param3');
     }
 
     render() {
+        // `isOpen` is managed only by 'PopupManager'
         const { isOpen } = this.props;
 
         return (
@@ -77,60 +92,38 @@ export class MyModal extends React.Component {
         );
     }
 }
-
 ```
 
 The library is agnostic to any popup library you decide to use.
 <br>
 ~ in this example we used `react-modal`
 
-
-### hooks
-The library also supports react-hooks
-```jsx
-// mainWithHooks.jsx
-import React from "react";
-import { usePopupManager } from "react-popup-manager";
-import { MyModal } from './MyModal'
-
-export const Main = () => {
-  const {open, closeAll} = usePopupManager();
-  const openModal = () => {
-    open(MyModal, {title: 'my modal', onClose: (...params) => console.log('modal has closed with:', ...params)}); // modal has closed with: param param2 param3
-  }
-  return (
-      <div>
-        <button onClick={() => openModal()}>
-          open modal
-        </button>
-        <button onClick={() => closeAll()}>
-          close all modals
-        </button>
-      </div>
-  );
-}
-
-```
-
-## API
+## USAGE
 
 ### `PopupProvider`
+`PopupProvider` is a `react context provider`. It needs to be rendered on the root of the app.
+It will provide the app with `popupManager`.
 `props`:
-* `popupManager` <i>(optional)</i> - Popup Manager. can send custom extended `PopupManager`. <br>
+* `popupManager` <i>(optional)</i> - Custom Popup Manager. can send an extended `PopupManager`. <br>
  <i>~ Default : uses `PopupManager`</i>
 
+### `usePopupManager`
+react hook that returns `popupManager`
+
 ### `withPopups(managerName)`
-HOC that adds `popupManager` to `props` of component
+When using class components, hooks can't be use. <br>
+As an alternative, `withPopups` is an HOC that adds `popupManager` to the component's `props`
 <br><br>
 `parameters`:
 * `managerName` <i>(optional)</i> - set manager name that will be added to props.
 
 <i>~ Default : uses `popupManager`</i>
 
-### `usePopupManager`
-react hook that returns `popupManager`
-
 ### `PopupManager`
+`PopupManager` is a singletone service that manages the state of the popups of the app.<br>
+`PopupManager` class can be extended for specific needs (for example: `showToast`, `openConfirmationDialog`)<br>
+If not extended, it has 2 methods:
+<br><br>
 `open(componentClass, popupProps)` - opens popup. render's popup component
 * `componentClass` - component's class or function
 * `popupProps` <i>(optional)</i> - consumer's popup props and also accepts these:
