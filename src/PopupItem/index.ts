@@ -1,4 +1,4 @@
-import { PopupProps } from '../popupsDef';
+import { PopupProps } from '../models';
 
 type PopupItemProps = PopupProps & { [key: string]: any };
 
