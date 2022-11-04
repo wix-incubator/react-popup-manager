@@ -1,6 +1,6 @@
 {
   "name": "@domotz/react-popup-manager",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "Manage react popups, Modals, Lightboxes, Notifications, etc. easily",
   "license": "MIT",
   "main": "dist/index.js",
