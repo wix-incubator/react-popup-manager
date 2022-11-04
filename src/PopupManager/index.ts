@@ -7,6 +7,7 @@ export type OpenPopupOptions<T> = Omit<T & PopupProps, 'show'>;
 export class PopupManager {
     private openPopups: PopupItem[] = [];
     public onPopupsChangeEvents: Function[] = [];
+    public deletionTimeout = 500;
   
     private callPopupsChangeEvents() {
       this.onPopupsChangeEvents.forEach(cb => cb());
@@ -63,6 +64,14 @@ export class PopupManager {
       const currentPopup = this.openPopups[currentPopupIndex];
   
       currentPopup.close(...params);
+
+      setTimeout(() => {
+        const currentPopupIndex = this.openPopups.findIndex(
+          ({ guid }) => guid === popupGuid,
+        );
+        this.openPopups.splice(currentPopupIndex, 1);
+      }, this.deletionTimeout)
+      
   
       this.callPopupsChangeEvents();
     }

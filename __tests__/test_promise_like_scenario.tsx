@@ -50,7 +50,7 @@ const ComponentHelper = () => {
     </PopupProvider>;
 }
 
-describe('Popup', () => {
+describe('manager.open().onCloseClick function', () => {
     it('render children of the Provider', () => {
         render(<ComponentHelper/>)
 
