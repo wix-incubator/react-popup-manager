@@ -1,5 +1,5 @@
 {
-  "name": "react-popup-manager",
+  "name": "@domotz/react-popup-manager",
   "version": "3.0.0",
   "description": "Manage react popups, Modals, Lightboxes, Notifications, etc. easily",
   "license": "MIT",
@@ -9,15 +9,9 @@
     "versionBumpStrategy": "patch",
     "registry": "https://registry.npmjs.org/"
   },
-  "author": {
-    "name": "Guy Wargzaer",
-    "email": "guyw@wix.com"
-  },
+  "author": "Guy Wargzaer <guyw@wix.com>",
   "contributors": [
-    {
-      "name": "Alessandro Pagiaro",
-      "email": "a.pagiaro@domotz.com"
-    }
+    "Alessandro Pagiaro <a.pagiaro@domotz.com>"
   ],
   "files": [
     "dist/*"
