@@ -21,7 +21,7 @@
     "yarn.lock"
   ],
   "scripts": {
-    "test": "yarn jest --env jsdom",
+    "test": "yarn build && yarn jest --env jsdom",
     "prepare": "yarn build",
     "build": "tsc"
   },

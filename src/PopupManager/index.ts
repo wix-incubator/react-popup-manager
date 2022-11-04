@@ -1,25 +1,15 @@
 import { PopupItem } from "../PopupItem";
 import {uniqueId} from 'lodash';
 import { PopupInstance, PopupProps } from "../models";
-const CLOSED_POPUPS_THRESHOLD = 10;
 
 export type OpenPopupOptions<T> = Omit<T & PopupProps, 'show'>;
 
 export class PopupManager {
     private openPopups: PopupItem[] = [];
-    private readonly _closedPopups: PopupItem[] = [];
     public onPopupsChangeEvents: Function[] = [];
   
     private callPopupsChangeEvents() {
       this.onPopupsChangeEvents.forEach(cb => cb());
-    }
-  
-    private get closedPopups() {
-      this._closedPopups.length = Math.min(
-        this._closedPopups.length,
-        CLOSED_POPUPS_THRESHOLD,
-      );
-      return this._closedPopups;
     }
   
     public subscribeOnPopupsChange(callback: Function): void {
@@ -34,7 +24,7 @@ export class PopupManager {
     }
   
     public get popups() {
-      return [...this.openPopups, ...this.closedPopups];
+      return this.openPopups;
     }
   
     public open = <T>(
@@ -74,15 +64,12 @@ export class PopupManager {
   
       currentPopup.close(...params);
   
-      const closedPopup = this.openPopups.splice(currentPopupIndex, 1)[0];
-      this.closedPopups.unshift(closedPopup);
       this.callPopupsChangeEvents();
     }
   
     public closeAll = (): void => {
       this.openPopups.forEach(popup => {
         popup.close();
-        this.closedPopups.unshift(popup);
       });
       this.openPopups = [];
       this.callPopupsChangeEvents();

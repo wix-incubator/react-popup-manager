@@ -38,7 +38,7 @@ export class PopupItem {
         }
       })
     }
-    if(!cb){
+    if(cb){
       this._onCloseClickPromise = this._onCloseClickPromise.then(cb);
     }
   }
