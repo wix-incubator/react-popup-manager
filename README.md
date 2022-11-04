@@ -9,6 +9,7 @@ Manage react popups, Modals, Lightboxes, Notifications etc.
 * The isOpen property has been replaced by `show` property.
 * The onClose property has been replaced by `onCloseClick` property.
 * withPopups has been removed. Feel free to submit a PR to re-add it.
+* add awaitable manager.open().onCloseClick() (check example below) to write flows easier
 
 ## What
 An agnostic react provider that lets you handle opening and closing popups separately from you're Component `render` function.
@@ -33,8 +34,8 @@ The Old Way                     |  The react-popup-manager Way
 ### install
 
 ```
-$ npm i --save react-popup-manager
-$ yarn add react-popup-manager
+$ npm i --save @domotz/react-popup-manager
+$ yarn add @domotz/react-popup-manager
 ```
 
 ### example
