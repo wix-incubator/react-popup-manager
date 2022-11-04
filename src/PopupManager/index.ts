@@ -54,10 +54,14 @@ export class PopupManager {
       this.callPopupsChangeEvents();
       return {
         close: () => this.close(guid),
+        onCloseClick: (cb) => {
+          newPopupItem.onCloseClickPromise = cb; 
+          return newPopupItem.onCloseClickPromise;
+        }
       };
     };
   
-    public close(popupGuid: string): void {
+    public close(popupGuid: string, ...params: any[]): void {
       const currentPopupIndex = this.openPopups.findIndex(
         ({ guid }) => guid === popupGuid,
       );
@@ -68,7 +72,7 @@ export class PopupManager {
   
       const currentPopup = this.openPopups[currentPopupIndex];
   
-      currentPopup.close();
+      currentPopup.close(...params);
   
       const closedPopup = this.openPopups.splice(currentPopupIndex, 1)[0];
       this.closedPopups.unshift(closedPopup);

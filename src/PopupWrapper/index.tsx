@@ -21,11 +21,11 @@ export function PopupsWrapper({popupManager}: PopupsWrapperProps){
     }, [popupManager, rerender])
 
     const onClose = React.useCallback(function (currentPopup: PopupItem, params: any) {
-        popupManager.close(currentPopup.guid);
+        popupManager.close(currentPopup.guid, params);
         const currentPopupProps: PopupProps = currentPopup.props;
         currentPopupProps &&
         currentPopupProps.onCloseClick &&
-        currentPopupProps.onCloseClick(...params);
+        currentPopupProps.onCloseClick(params);
       }, [popupManager]);
 
     return <> 
