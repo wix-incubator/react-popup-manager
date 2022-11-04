@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import { PopupProps, PopupProvider, usePopupManager } from '../dist';
 
 const onCloseSpy = jest.fn();
-const onClosePromiseLikeSpy = jest.fn(x => x);
+const onClosePromiseLikeSpy = jest.fn(x => x+'extra_data');
 interface PopupComponentProps {
     customProps: string,
 }
@@ -45,10 +45,8 @@ const SomeContent = () => {
 }
 
 const ComponentHelper = () => {
-    const [mounted, setMounted] = React.useState(true)
     return <PopupProvider>
-        { mounted && <SomeContent />}
-        <button onClick={() => setMounted(false)}>Unmount the content</button>
+        <SomeContent />
     </PopupProvider>;
 }
 
@@ -70,7 +68,7 @@ describe('Popup', () => {
         expect(onClosePromiseLikeSpy).toHaveBeenCalledTimes(1);
         
         expect(screen.queryByText(/I am a visible popup\. Custom Props: Montacchiello/)).not.toBeInTheDocument();
-        expect(await screen.findByText(/I am a visible popup. Custom Props: first popup result/)).toBeInTheDocument();
+        expect(await screen.findByText(/I am a visible popup. Custom Props: first popup resultextra_data/)).toBeInTheDocument();
     });
     
     

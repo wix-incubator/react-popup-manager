@@ -21,7 +21,7 @@ export class PopupItem {
 
   public get onCloseClickPromise(): any {
     if(!this._onCloseClickPromise){
-      this._onCloseClickPromise = new Promise((resolve, reject) => {
+      this._onCloseClickPromise = new Promise((resolve) => {
         this._onCloseClickPromiseHandler = {
           resolve,
         }
@@ -38,7 +38,9 @@ export class PopupItem {
         }
       })
     }
-    this._onCloseClickPromise = this._onCloseClickPromise.then(cb);
+    if(!cb){
+      this._onCloseClickPromise = this._onCloseClickPromise.then(cb);
+    }
   }
 
   public close(...params: any[]) {
