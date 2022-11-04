@@ -1,6 +1,6 @@
 {
   "name": "@domotz/react-popup-manager",
-  "version": "3.0.0",
+  "version": "3.2.2",
   "description": "Manage react popups, Modals, Lightboxes, Notifications, etc. easily",
   "license": "MIT",
   "main": "dist/index.js",
@@ -21,7 +21,7 @@
     "yarn.lock"
   ],
   "scripts": {
-    "test": "yarn jest --env jsdom",
+    "test": "yarn build && yarn jest --env jsdom",
     "prepare": "yarn build",
     "build": "tsc"
   },
@@ -55,6 +55,7 @@
     "@types/react": "^18.0.24",
     "jest": "^29.2.2",
     "jest-environment-jsdom": "^29.2.2",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "lodash": "^4.17.21",

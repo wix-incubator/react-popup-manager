@@ -1,25 +1,16 @@
 import { PopupItem } from "../PopupItem";
 import {uniqueId} from 'lodash';
 import { PopupInstance, PopupProps } from "../models";
-const CLOSED_POPUPS_THRESHOLD = 10;
 
 export type OpenPopupOptions<T> = Omit<T & PopupProps, 'show'>;
 
 export class PopupManager {
     private openPopups: PopupItem[] = [];
-    private readonly _closedPopups: PopupItem[] = [];
     public onPopupsChangeEvents: Function[] = [];
+    public deletionTimeout = 500;
   
     private callPopupsChangeEvents() {
       this.onPopupsChangeEvents.forEach(cb => cb());
-    }
-  
-    private get closedPopups() {
-      this._closedPopups.length = Math.min(
-        this._closedPopups.length,
-        CLOSED_POPUPS_THRESHOLD,
-      );
-      return this._closedPopups;
     }
   
     public subscribeOnPopupsChange(callback: Function): void {
@@ -34,7 +25,7 @@ export class PopupManager {
     }
   
     public get popups() {
-      return [...this.openPopups, ...this.closedPopups];
+      return this.openPopups;
     }
   
     public open = <T>(
@@ -54,10 +45,14 @@ export class PopupManager {
       this.callPopupsChangeEvents();
       return {
         close: () => this.close(guid),
+        onCloseClick: (cb) => {
+          newPopupItem.onCloseClickPromise = cb; 
+          return newPopupItem.onCloseClickPromise;
+        }
       };
     };
   
-    public close(popupGuid: string): void {
+    public close(popupGuid: string, ...params: any[]): void {
       const currentPopupIndex = this.openPopups.findIndex(
         ({ guid }) => guid === popupGuid,
       );
@@ -68,17 +63,22 @@ export class PopupManager {
   
       const currentPopup = this.openPopups[currentPopupIndex];
   
-      currentPopup.close();
+      currentPopup.close(...params);
+
+      setTimeout(() => {
+        const currentPopupIndex = this.openPopups.findIndex(
+          ({ guid }) => guid === popupGuid,
+        );
+        this.openPopups.splice(currentPopupIndex, 1);
+      }, this.deletionTimeout)
+      
   
-      const closedPopup = this.openPopups.splice(currentPopupIndex, 1)[0];
-      this.closedPopups.unshift(closedPopup);
       this.callPopupsChangeEvents();
     }
   
     public closeAll = (): void => {
       this.openPopups.forEach(popup => {
         popup.close();
-        this.closedPopups.unshift(popup);
       });
       this.openPopups = [];
       this.callPopupsChangeEvents();

@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.2.0] - 2022-11-04
+### Added
+- Removed manager.closedPopups API
+
+## [3.1.0] - 2022-11-04
+### Added
+- Added .onCloseClick as awaitable promise to permit to create easier flow
+
 ## [3.0.0] - 2022-11-03
 ### Added
 - The new version runs in React 18 using Functional Component as internal implementation.
