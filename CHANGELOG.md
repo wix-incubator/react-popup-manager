@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.0.0] - 2022-11-03
+### Added
+- The new version runs in React 18 using Functional Component as internal implementation.
+- The isOpen property has been replaced by `show` property.
+- The onClose property has been replaced by `onCloseClick` property.
+- withPopups has been removed. Feel free to submit a PR to re-add it.
+
 ## [2.0.30] - 2021-04-05
 ### Added
 - `usePopupManager` - add support for react-hooks

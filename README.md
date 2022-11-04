@@ -1,18 +1,26 @@
 # react-popup-manager &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/wix-incubator/typed-locale-keys/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/react-popup-manager.svg?style=flat)](https://www.npmjs.com/package/react-popup-manager)
 
-Manage react popups, Modals, Lightboxes, Notifications etc.
+Manage react popups, Modals, Lightboxes, Notifications etc. 
+
+# Now in React 18!
+
+# Main difference with the react-popup-manager v2.1.1
+* The new version runs in React 18 using Functional Component as internal implementation.
+* The isOpen property has been replaced by `show` property.
+* The onClose property has been replaced by `onCloseClick` property.
+* withPopups has been removed. Feel free to submit a PR to re-add it.
 
 ## What
 An agnostic react provider that lets you handle opening and closing popups separately from you're Component `render` function.
 
 ## Why
-* No need to manage the `isOpen` state
+* No need to manage the `show` state
 * No need to think where the `Component` should be written.
 * No need to have a component nested behind any inline conditional rendering
 * Most important -  a single paradigm for handling popups, Modals, Lightboxes, Notifications etc. etc.
 <br>
 
-An example of how using this library will simplify your code
+An example of how using this library will simplify your code (it uses a slightly different API, please check latest version below)
 
 The Old Way                     |  The react-popup-manager Way
 :-------------------------:|:-------------------------:
@@ -37,15 +45,16 @@ Wrap the root of the app with `PopupProvider`
 ```jsx
 // app.jsx
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from 'react-dom/client'
 import { PopupProvider } from "react-popup-manager";
 import { Main } from "./Main";
 
-ReactDOM.render(
+const container = document.getElementById('app');
+const root = createRoot(container); // createRoot(container!) if you use TypeScript
+root.render(
   <PopupProvider>
     <Main />
   </PopupProvider>,
-  document.getElementById("root")
 );
 ```
 
@@ -60,7 +69,7 @@ import { MyModal } from './MyModal'
 export const Main = () => {
   const popupManager = usePopupManager();
   const openModal = () => {
-    // open MyModal with it's needed `props` and an `onClose` callback function
+    // open MyModal with it's needed `props` and an `onCloseClick` callback function
     popupManager.open(MyModal, {
       title: 'my modal',
       onClose: (...params) => console.log('modal has closed with:', ...params), // modal has closed with: param param2 param3
@@ -76,38 +85,30 @@ export const Main = () => {
 }
 ```
 
-The modal Component will recieve the sent `props` and will also have `isOpen` and `onClose` added by the `popupManager`.<br>
-`onClose` will trigger the `popupManager` to close the modal
+The modal Component will recieve the sent `props` and will also have `show` and `onCloseClick` added by the `popupManager`.<br>
+`onCloseClick` will trigger the `popupManager` to close the modal
 
 ```jsx
 // MyModal.jsx
 import React from 'react';
 import Modal from 'react-modal';
 
-export class MyModal extends React.Component {
+export function MyModal({show, onCloseClick, title}) {
 
-    close() {
-        // `onClose` will close the modal and will call the callback defined in main.jsx
-        this.props.onClose('param', 'param2', 'param3');
-    }
+    const close = () => onCloseClick('param', 'param2', 'param3');
 
-    render() {
-        // `isOpen` is managed only by 'PopupManager'
-        const { isOpen } = this.props;
-
-        return (
-            <Modal isOpen={isOpen} >
-               <span>{this.props.title}</span>
-               <button onClick={() => this.close()}> close </button>
-             </Modal>
-        );
-    }
+    return (
+        <Modal show={show} >
+          <span>{title}</span>
+          <button onClick={close}> close </button>
+        </Modal>
+    );
 }
 ```
 
 The library is agnostic to any popup library you decide to use.
 <br>
-~ in this example we used `react-modal`
+~ you only need to wrap your component in case property different than `show` and `onCloseClick` are used to handle the popup visibility.
 
 ## API
 
@@ -121,22 +122,14 @@ A react context provider, should wrap the root of the app in order to provide th
 React hook that returns `popupManager`.
 For class components, check the `withPopups` HOC below
 
-### `withPopups(managerName)`
-An HOC that adds `popupManager` to the component's `props`.<br>
-Can be used as an alternative to `usePopupManager`.
-<br><br>
-`parameters`:
-* `managerName` <i>(optional)</i> - set manager name that will be added to props.
-
-<i>~ Default : uses `popupManager`</i>
 
 ### `PopupManager`
 A singletone service that manages the state of the popups of the app.<br>
 Can be extended for specific needs (<i>for example: `showToast`, `openConfirmationDialog`</i>)<br>
 If not extended, it has 2 methods:
 <br><br>
-`open(componentClass, popupProps)` - opens popup. render's popup component
-* `componentClass` - component's class or function
+`open(Component, popupProps)` - opens popup. render's popup component
+* `Component` - component's class or function
 * `popupProps` <i>(optional)</i> - consumer's popup props and also accepts these:
     * `onClose` - will be called on actual popup close with arguments
      > `isOpen` is not allowed.
