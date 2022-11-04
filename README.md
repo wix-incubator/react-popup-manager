@@ -68,12 +68,12 @@ import { MyModal } from './MyModal'
 
 export const Main = () => {
   const popupManager = usePopupManager();
-  const openModal = () => {
+  const openModal = async () => {
     // open MyModal with it's needed `props` and an `onCloseClick` callback function
-    popupManager.open(MyModal, {
+    let result = await popupManager.open(MyModal, {
       title: 'my modal',
-      onClose: (...params) => console.log('modal has closed with:', ...params), // modal has closed with: param param2 param3
-    }); 
+    }).onCloseClick((...params) => 'modal has closed with:', ...params);
+    console.log(result) // 'modal has closed with: param, param2, param3'
   }
   return (
       <div>
