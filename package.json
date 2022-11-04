@@ -14,10 +14,15 @@
     "Alessandro Pagiaro <a.pagiaro@domotz.com>"
   ],
   "files": [
-    "dist/*"
+    "dist/*",
+    "package.json",
+    "README.md",
+    "LICENSE",
+    "yarn.lock"
   ],
   "scripts": {
     "test": "yarn jest --env jsdom",
+    "prepare": "yarn build",
     "build": "tsc"
   },
   "repository": {
