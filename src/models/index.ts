@@ -4,6 +4,6 @@ export interface PopupInstance {
 }
 
 export interface PopupProps {
-    onCloseClick: (...args: any[]) => any;
-    show: boolean;
+    onCloseClick?: (...args: any[]) => any;
+    show?: boolean;
 }
