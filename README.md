@@ -49,6 +49,7 @@ ReactDOM.render(
 );
 ```
 
+
 Use the hook `usePopupManager` to open a modal
 
 ```jsx
