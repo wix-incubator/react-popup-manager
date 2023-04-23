@@ -143,4 +143,5 @@ If not extended, it has 2 methods:
 * returns - object of instance of open popup
     * `close` - closes the popup
 
+
 `closeAll()` - closes all open popups.
