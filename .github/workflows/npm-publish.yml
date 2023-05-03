@@ -1,0 +1,86 @@
+name: 'Publish NPM Package'
+
+on:
+  workflow_run:
+    workflows: [ "Build" ]
+    types: [ completed ]
+    branches: [ 'master' ]
+
+jobs:
+  create-release:
+    name: 'Bump Version'
+    runs-on: ubuntu-latest
+    permissions:
+      repository-projects: write
+    if: ${{ github.event.workflow_run.conclusion == 'success'}}
+
+    steps:
+      - name: 'Checkout source code'
+        uses: 'actions/checkout@v2'
+        with:
+          ref: ${{ github.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: cat ./package.json
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.GITHUB_TOKEN }}
+          known_hosts: github.com
+
+      - name: Automated Version Bump
+        id: version-bump
+        uses: phips28/gh-action-bump-version@master
+        with:
+          major-wording:  MAJOR,BREAKING
+          minor-wording: MINOR
+          patch-wording: ''
+          tag-prefix: v
+          skip-push: true
+
+      - run: git push origin ${{ github.ref_name }} --tags
+
+      - name: Changelog
+        uses: scottbrenner/generate-changelog-action@master
+        id: Changelog
+        env:
+          REPO: ${{ github.repository }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version-bump.outputs.newTag }}
+          release_name: Release ${{ steps.version-bump.outputs.newTag }}
+          body: ${{ steps.Changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
+
+      - run: cat ./package.json
+
+      - name: Output Step
+        env:
+          NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
+        run: echo "new tag $NEW_TAG"
+  publish-npm:
+    runs-on: ubuntu-latest
+    needs: create-release
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: yarn
+          registry-url: https://registry.npmjs.org/
+
+      - run: yarn install --frozen-lockfile
+      - run: yarn run build
+      - run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+      - run: echo "Published!"

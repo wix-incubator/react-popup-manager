@@ -1,0 +1,24 @@
+name: 'Build'
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  quality-check:
+    name: Quality Check
+    runs-on: ubuntu-latest
+    if: "!startsWith(github.event.head_commit.message, 'ci: version bump to v')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: yarn
+          registry-url: https://registry.npmjs.org/
+      - run: yarn install --frozen-lockfile
+      - run: yarn test
