@@ -13,7 +13,7 @@ export class PopupManagerInternal implements PopupManager {
   public onPopupsChangeEvents: Function[] = [];
 
   private callPopupsChangeEvents() {
-    this.onPopupsChangeEvents.forEach(cb => cb());
+    this.onPopupsChangeEvents.forEach((cb) => cb());
   }
 
   private get closedPopups() {
@@ -71,7 +71,7 @@ export class PopupManagerInternal implements PopupManager {
   }
 
   public closeAll = (): void => {
-    this.openPopups.forEach(popup => {
+    this.openPopups.forEach((popup) => {
       popup.close();
       this.closedPopups.unshift(popup);
     });
