@@ -19,7 +19,7 @@
   "scripts": {
     "start": "yoshi start",
     "precommit": "lint-staged",
-    "lint-fix": "yoshi lint --fix",
+    "lint:fix": "yoshi lint --fix",
     "build": "yoshi build",
     "pretest": "yarn run build",
     "test": "yoshi test --jest",
@@ -47,14 +47,14 @@
     "@types/react-dom": "^16.8.2",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.11.2",
-    "jest-yoshi-preset": "^4.333.5",
+    "jest-yoshi-preset": "^4.87.0",
     "lint-staged": "^7.2.2",
     "puppeteer": "^1.1.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-test-renderer": "^16.8.3",
     "typescript": "~4.3.0",
-    "yoshi": "^4.333.5"
+    "yoshi": "^4.87.0"
   },
   "lint-staged": {
     "linters": {

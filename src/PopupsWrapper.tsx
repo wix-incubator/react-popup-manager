@@ -60,12 +60,12 @@ export class PopupsWrapper extends React.Component<PopupsWrapperProps> {
   public render() {
     const { popupManager } = this.props;
 
-    return popupManager.popups.map((currentPopup) => (
+    return popupManager.popups.map(currentPopup => (
       <SinglePopupLifeCycle
         currentPopup={currentPopup}
         key={currentPopup.guid}
         isOpen={currentPopup.isOpen}
-        onClose={(params) => this.onClose(currentPopup, params)}
+        onClose={params => this.onClose(currentPopup, params)}
       />
     ));
   }

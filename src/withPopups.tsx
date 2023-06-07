@@ -6,10 +6,10 @@ import { PopupContext } from './PopupContext';
  */
 export function withPopups(managerName: string = 'popupManager'): any {
   return (WrappedComponent): any => {
-    return (props) => {
+    return props => {
       return (
         <PopupContext.Consumer>
-          {(context) => (
+          {context => (
             <WrappedComponent
               {...props}
               {...{ [managerName]: context.popupManager }}
