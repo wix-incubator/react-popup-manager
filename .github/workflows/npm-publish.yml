@@ -10,8 +10,6 @@ jobs:
   create-release:
     name: 'Bump Version'
     runs-on: ubuntu-latest
-    permissions:
-      repository-projects: write
     if: ${{ github.event.workflow_run.conclusion == 'success'}}
 
     steps:
