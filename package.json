@@ -1,6 +1,6 @@
 {
   "name": "react-popup-manager",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "Manage react popups, Modals, Lightboxes, Notifications, etc. easily",
   "license": "MIT",
   "main": "dist/src/index.js",
