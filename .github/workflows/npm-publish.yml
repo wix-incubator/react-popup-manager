@@ -16,8 +16,7 @@ jobs:
         uses: 'actions/checkout@v2'
         with:
           ref: ${{ github.ref }}
-
-      - run: cat ./package.json
+          ssh-key: ${{ secrets.BUMP_SECRET }}
 
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
