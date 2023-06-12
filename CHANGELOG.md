@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file.
 to get the upgrade features that fix the animation issue you need to use these:
 - `isOpen` - new `Prop` added to existing `PopupProps`. <br>
   The `props` that are added to consumers popup when calling `popupManager.open()` function.<br>
-
+ 
   >:warning:&nbsp;**Important** - &nbsp; must use in consumers popup otherwise it will never close
 
 ### Deprecated
