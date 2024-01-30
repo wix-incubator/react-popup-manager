@@ -1,7 +1,7 @@
 import {TestPopupsDriver} from './TestPopups.driver';
 import {TestPopupsManager} from './testPopupsManager';
 import * as React from 'react';
-import {generateDataHook, TestPopupUsesIsOpen} from "./testPopups";
+import {generateDataHook, TestPopupUsesIsOpen} from "./TestPopupUsesIsOpen/TestPopupUsesIsOpen";
 import {PopupManager} from '../index';
 import {usePopupManager} from '../index';
 
@@ -60,12 +60,40 @@ describe('Popups', () => {
 
   it('should close popup using open\'s return instance', () => {
     justBeforeEachTest({popupManager: new TestPopupsManager()});
-    const testPopup1 = (popupManager as TestPopupsManager).openTestPopup(generateDataHook());
+    const dataHook = generateDataHook();
+    const testPopup1 = (popupManager as TestPopupsManager).openTestPopup(dataHook);
     driver.update();
-    expect(driver.get.popupDriver(generateDataHook()).get.exists()).toBe(true);
+    expect(driver.get.popupDriver(dataHook).get.exists()).toBe(true);
     testPopup1.close();
     driver.update();
-    expect(driver.get.popupDriver(generateDataHook()).get.isOpen()).toBe(false);
+    expect(driver.get.popupDriver(dataHook).get.isOpen()).toBe(false);
+    expect(driver.get.popupDriver(dataHook).get.exists()).toBe(true);
+  });
+
+  it('should unmount popup using unmount\'s return instance', () => {
+    justBeforeEachTest({popupManager: new TestPopupsManager()});
+    const dataHook = generateDataHook();
+    const testPopup1 = (popupManager as TestPopupsManager).openTestPopup(dataHook);
+    driver.update();
+    expect(driver.get.popupDriver(dataHook).get.exists()).toBe(true);
+    testPopup1.unmount();
+    driver.update();
+    expect(driver.get.popupDriver(dataHook).get.exists()).toBe(false);
+  });
+
+  it('should unmount popup using "close" and then "unmount" of popup instance', () => {
+    justBeforeEachTest({popupManager: new TestPopupsManager()});
+    const dataHook = generateDataHook();
+    const testPopup1 = (popupManager as TestPopupsManager).openTestPopup(dataHook);
+    driver.update();
+    expect(driver.get.popupDriver(dataHook).get.exists()).toBe(true);
+    testPopup1.close();
+    driver.update();
+    expect(driver.get.popupDriver(dataHook).get.isOpen()).toBe(false);
+    expect(driver.get.popupDriver(dataHook).get.exists()).toBe(true);
+    testPopup1.unmount();
+    driver.update();
+    expect(driver.get.popupDriver(dataHook).get.exists()).toBe(false);
   });
 
   it('should open popup with custom manager name', () => {

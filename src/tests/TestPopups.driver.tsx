@@ -3,32 +3,8 @@ import {configure, mount, ReactWrapper} from 'enzyme';
 import {withPopups, PopupManager, PopupProvider} from '..';
 import {PopupsDriver} from '../Popups.driver';
 import * as Adapter from 'enzyme-adapter-react-16';
-
-export class PopupDriver {
-  constructor(private component: ReactWrapper<any>) {
-  }
-
-  private getByDataHook(
-    hook: string,
-    parent: ReactWrapper<any, any> = this.component,
-  ): ReactWrapper<any, any> {
-    return parent.find(`[data-hook="${hook}"]`);
-  }
-
-  public when = {
-    closePopup: (): PopupDriver => {
-      this.get.closeButton().simulate('click');
-      return this;
-    },
-  };
-
-  public get = {
-    exists: () => this.component.exists(),
-    isOpen: () => this.component.props()['data-is-open'],
-    closeButton: () => this.getByDataHook('close-button'),
-    content: () => this.getByDataHook('popup-content').text(),
-  }
-}
+import {TestPopupUsesIsOpenDriver} from "./TestPopupUsesIsOpen/TestPopupUsesIsOpen.driver";
+import {getByDataHook} from "./getByDataHook";
 
 export class TestPopupsDriver {
   private componentType: React.ComponentType;
@@ -45,7 +21,7 @@ export class TestPopupsDriver {
     hook: string,
     parent: ReactWrapper<any, any> = this.component,
   ): ReactWrapper<any, any> {
-    return parent.find(`[data-hook="${hook}"]`);
+    return getByDataHook(parent,hook);
   }
 
   private render(Component: React.ComponentType<any>): ReactWrapper<any> {
@@ -100,7 +76,7 @@ export class TestPopupsDriver {
 
   public get = {
     givenComponent: () => this.component.find(this.componentType),
-    popupDriver: (popupDataHook: string) => new PopupDriver(this.getByDataHook(popupDataHook)),
+    popupDriver: (popupDataHook: string) => new TestPopupUsesIsOpenDriver(this.getByDataHook(popupDataHook)),
     isPopupOpen: () => this.getPopupsDriver().get.isAnyPopupsOpen(),
   }
 }

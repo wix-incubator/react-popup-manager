@@ -49,6 +49,7 @@ export class PopupManagerInternal implements PopupManager {
     this.callPopupsChangeEvents();
     return {
       close: () => this.close(guid),
+      unmount: () => this.unmount(guid),
     };
   };
 
@@ -68,6 +69,30 @@ export class PopupManagerInternal implements PopupManager {
     const closedPopup = this.openPopups.splice(currentPopupIndex, 1)[0];
     this.closedPopups.unshift(closedPopup);
     this.callPopupsChangeEvents();
+  }
+
+  private unmount(popupGuid: string): void {
+    const closePopupIndex = this.openPopups.findIndex(
+      ({ guid }) => guid === popupGuid,
+    );
+    const unmountPopupIndex = this.closedPopups.findIndex(
+      ({ guid }) => guid === popupGuid,
+    );
+    let shouldCallPopupsChangeEvents: boolean;
+
+    if (closePopupIndex !== -1) {
+      shouldCallPopupsChangeEvents = true;
+      this.openPopups.splice(closePopupIndex, 1);
+    }
+
+    if (unmountPopupIndex !== -1) {
+      shouldCallPopupsChangeEvents = true;
+      this.closedPopups.splice(unmountPopupIndex, 1);
+    }
+
+    if (shouldCallPopupsChangeEvents) {
+      this.callPopupsChangeEvents();
+    }
   }
 
   public closeAll = (): void => {

@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [2.0.31] - 2024-01-31
+### Added
+- `unmount` - `popupManager.open(Modal)` returns and object that now has `unmount` function that removes popup instance. <br>
+  This fixes an [issue](https://github.com/wix-incubator/react-popup-manager/issues/19) of code still running after popup was closed.
+
 ## [2.0.30] - 2021-04-05
 ### Added
 - `usePopupManager` - add support for react-hooks
@@ -10,7 +15,7 @@ All notable changes to this project will be documented in this file.
 - Transitions on show and hide were fixed! <br>
   There was an issue with the current approach to show and hide popups.<br>
   It added and removed dom elements, preventing the in-code transition solution of external popup-libraries.<br>
-  ><i>for example: instead of fade out, it use to just disappear</i>
+  ><i>for example: instead of fade out, it used to just disappear</i>
 ### Changed
 - Changed `PopupManager` `close` approach:<br>
   Instead of adding and removing it from the DOM, it changes popup's `isOpen` prop.<br>

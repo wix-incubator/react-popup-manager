@@ -2,6 +2,7 @@ import { PopupManager } from './popupManager';
 
 export interface popupInstance {
   close: Function;
+  unmount: Function;
 }
 
 export interface PopupProps {
