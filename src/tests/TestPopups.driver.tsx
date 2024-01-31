@@ -76,6 +76,7 @@ export class TestPopupsDriver {
 
   public get = {
     givenComponent: () => this.component.find(this.componentType),
+    component: () => this.component,
     popupDriver: (popupDataHook: string) => new TestPopupUsesIsOpenDriver(this.getByDataHook(popupDataHook)),
     isPopupOpen: () => this.getPopupsDriver().get.isAnyPopupsOpen(),
   }

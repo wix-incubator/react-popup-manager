@@ -2,8 +2,10 @@ import {TestPopupsDriver} from './TestPopups.driver';
 import {TestPopupsManager} from './testPopupsManager';
 import * as React from 'react';
 import {generateDataHook, TestPopupUsesIsOpen} from "./TestPopupUsesIsOpen/TestPopupUsesIsOpen";
-import {PopupManager} from '../index';
+import {PopupManager, PopupProps} from '../index';
 import {usePopupManager} from '../index';
+import {useEffect} from "react";
+import {getByDataHook} from "./getByDataHook";
 
 describe('Popups', () => {
   let driver: TestPopupsDriver;
@@ -17,17 +19,17 @@ describe('Popups', () => {
 
     component && driver.given.component(component);
     driver
-      .given.popupManager(popupManager as any, popupManagerName).when.create();
+        .given.popupManager(popupManager as any, popupManagerName).when.create();
   }
 
   it('should open popup using default popup manager', () => {
     const testedComponent = (props: { popupManager: PopupManager }) => (
-      <div>
-        <button
-          data-hook="button-open"
-          onClick={() => props.popupManager.open(TestPopupUsesIsOpen)}
-        />
-      </div>
+        <div>
+          <button
+              data-hook="button-open"
+              onClick={() => props.popupManager.open(TestPopupUsesIsOpen)}
+          />
+        </div>
     );
 
     justBeforeEachTest({component: testedComponent});
@@ -41,12 +43,12 @@ describe('Popups', () => {
 
   it('should open popup with custom popup manager', () => {
     const testedComponent = (props: { popupManager: TestPopupsManager }) => (
-      <div>
-        <button
-          data-hook="button-open"
-          onClick={() => props.popupManager.openTestPopup(generateDataHook())}
-        />
-      </div>
+        <div>
+          <button
+              data-hook="button-open"
+              onClick={() => props.popupManager.openTestPopup(generateDataHook())}
+          />
+        </div>
     );
 
     justBeforeEachTest({component: testedComponent, popupManager: new TestPopupsManager()});
@@ -96,15 +98,43 @@ describe('Popups', () => {
     expect(driver.get.popupDriver(dataHook).get.exists()).toBe(false);
   });
 
+  it('should not change instance of onClose', () => {
+    let onCloseChangedTimes = 0;
+    const TestOnClosePopup = (props: PopupProps) => {
+      useEffect(() => {
+        onCloseChangedTimes++;
+      }, [props.onClose]);
+      return (
+          <button data-hook="tested-popup" onClick={props.onClose}>
+          </button>
+      );
+    }
+
+    justBeforeEachTest();
+    const testOnClosePopup = popupManager.open(TestOnClosePopup);
+    driver.update();
+    const extraComponent = popupManager.open(TestPopupUsesIsOpen)
+    driver.update();
+    extraComponent.close();
+    driver.update();
+    const testedComponentDriver = getByDataHook(driver.get.component(), 'tested-popup');
+    expect(testedComponentDriver.exists()).toBe(true);
+    testedComponentDriver.simulate('click');
+    driver.update();
+    testOnClosePopup.unmount();
+    driver.update();
+    expect(onCloseChangedTimes).toBe(1);
+  });
+
   it('should open popup with custom manager name', () => {
     const customManagerName = 'customName';
     const testedComponent = (props: { [customManagerName]: TestPopupsManager }) => (
-      <div>
-        <button
-          data-hook="button-open"
-          onClick={() => props[customManagerName].openTestPopup(generateDataHook())}
-        />
-      </div>
+        <div>
+          <button
+              data-hook="button-open"
+              onClick={() => props[customManagerName].openTestPopup(generateDataHook())}
+          />
+        </div>
     );
 
     justBeforeEachTest({popupManager: new TestPopupsManager(), popupManagerName: customManagerName, component: testedComponent});
@@ -120,12 +150,12 @@ describe('Popups', () => {
     const onClose = jest.fn();
     const content = 'popup content';
     const testedComponent = (props: { popupManager: TestPopupsManager }) => (
-      <div>
-        <button
-          data-hook="button-open"
-          onClick={() => props.popupManager.openTestPopup(generateDataHook(), onClose, content)}
-        />
-      </div>
+        <div>
+          <button
+              data-hook="button-open"
+              onClick={() => props.popupManager.openTestPopup(generateDataHook(), onClose, content)}
+          />
+        </div>
     );
 
     justBeforeEachTest({component: testedComponent, popupManager: new TestPopupsManager()});
@@ -178,39 +208,39 @@ describe('Popups', () => {
       expect(driver.get.popupDriver(generateDataHook()).get.isOpen()).toBe(false);
     });
 
-    it('should allow threshold of 10 closed popups in DOM only. First Closed First Removed', () => {
-      justBeforeEachTest();
-      const popupThreshold = 10;
-      for (let popupDataHookIndex = 0; popupDataHookIndex <= popupThreshold; popupDataHookIndex++) {
-        popupManager.open(TestPopupUsesIsOpen, {dataHook: generateDataHook(popupDataHookIndex)});
-        driver.update();
-        driver.get.popupDriver(generateDataHook(popupDataHookIndex)).when.closePopup();
-
-        expect(driver.get.popupDriver(generateDataHook(popupDataHookIndex)).get.exists()).toBe(true);
-        expect(driver.get.popupDriver(generateDataHook(popupDataHookIndex)).get.isOpen()).toBe(false);
-      }
-
-      expect(driver.get.popupDriver(generateDataHook(0)).get.exists()).toBe(false);
-      expect(driver.get.popupDriver(generateDataHook(1)).get.exists()).toBe(true);
-      expect(driver.get.popupDriver(generateDataHook(1)).get.isOpen()).toBe(false);
-    });
-
-    it('should CLOSE ALL popups. threshold 10. First Closed First Removed', () => {
-      justBeforeEachTest();
-      const popupThreshold = 10;
-
-      for (let popupDataHookIndex  = 0; popupDataHookIndex  <= popupThreshold; popupDataHookIndex ++) {
-        popupManager.open(TestPopupUsesIsOpen, {dataHook: generateDataHook(popupDataHookIndex)});
-      }
-
-      popupManager.closeAll();
+  it('should allow threshold of 10 closed popups in DOM only. First Closed First Removed', () => {
+    justBeforeEachTest();
+    const popupThreshold = 10;
+    for (let popupDataHookIndex = 0; popupDataHookIndex <= popupThreshold; popupDataHookIndex++) {
+      popupManager.open(TestPopupUsesIsOpen, {dataHook: generateDataHook(popupDataHookIndex)});
       driver.update();
-      expect(driver.get.popupDriver(generateDataHook(0)).get.exists()).toBe(false);
-      for (let popupDataHookIndex  = 1; popupDataHookIndex  <= popupThreshold; popupDataHookIndex ++) {
-        expect(driver.get.popupDriver(generateDataHook(popupDataHookIndex)).get.exists()).toBe(true);
-        expect(driver.get.popupDriver(generateDataHook(popupDataHookIndex)).get.isOpen()).toBe(false);
-      }
-    });
+      driver.get.popupDriver(generateDataHook(popupDataHookIndex)).when.closePopup();
+
+      expect(driver.get.popupDriver(generateDataHook(popupDataHookIndex)).get.exists()).toBe(true);
+      expect(driver.get.popupDriver(generateDataHook(popupDataHookIndex)).get.isOpen()).toBe(false);
+    }
+
+    expect(driver.get.popupDriver(generateDataHook(0)).get.exists()).toBe(false);
+    expect(driver.get.popupDriver(generateDataHook(1)).get.exists()).toBe(true);
+    expect(driver.get.popupDriver(generateDataHook(1)).get.isOpen()).toBe(false);
+  });
+
+  it('should CLOSE ALL popups. threshold 10. First Closed First Removed', () => {
+    justBeforeEachTest();
+    const popupThreshold = 10;
+
+    for (let popupDataHookIndex  = 0; popupDataHookIndex  <= popupThreshold; popupDataHookIndex ++) {
+      popupManager.open(TestPopupUsesIsOpen, {dataHook: generateDataHook(popupDataHookIndex)});
+    }
+
+    popupManager.closeAll();
+    driver.update();
+    expect(driver.get.popupDriver(generateDataHook(0)).get.exists()).toBe(false);
+    for (let popupDataHookIndex  = 1; popupDataHookIndex  <= popupThreshold; popupDataHookIndex ++) {
+      expect(driver.get.popupDriver(generateDataHook(popupDataHookIndex)).get.exists()).toBe(true);
+      expect(driver.get.popupDriver(generateDataHook(popupDataHookIndex)).get.isOpen()).toBe(false);
+    }
+  });
 
   describe('deprecations', () => {
     it('should throw error if user sends `isOpen` to open popupProps', done => {

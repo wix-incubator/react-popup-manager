@@ -8,12 +8,16 @@ interface PopupsWrapperProps {
 
 interface SinglePopupLifeCycleProps {
   currentPopup: PopupItem;
-  onClose(params: any[]): any;
+  onClose(guid: string): any;
   isOpen: boolean;
 }
 
 class SinglePopupLifeCycle extends React.Component<SinglePopupLifeCycleProps> {
   state = { isOpen: false };
+  constructor(props) {
+      super(props);
+      this.onClose = this.onClose.bind(this)
+  }
 
   componentDidMount(): void {
     if (this.props.isOpen === true) {
@@ -31,30 +35,35 @@ class SinglePopupLifeCycle extends React.Component<SinglePopupLifeCycleProps> {
 
     return null;
   }
+  private onClose(...params: any[]) {
+      const {currentPopup, onClose} = this.props;
+      onClose(currentPopup.guid);
+      currentPopup.props?.onClose?.(...params);
+  }
 
   render() {
-    const { currentPopup, onClose } = this.props;
-
+    const { currentPopup } = this.props;
     return (
       <currentPopup.ComponentClass
         isOpen={this.state.isOpen}
         {...currentPopup.props}
-        onClose={(...params) => onClose(params)}
+        onClose={this.onClose}
       />
     );
   }
 }
 
 export class PopupsWrapper extends React.Component<PopupsWrapperProps> {
+    constructor(props) {
+        super(props);
+        this.onClose = this.onClose.bind(this);
+    }
   componentDidMount(): void {
     this.props.popupManager.subscribeOnPopupsChange(() => this.forceUpdate());
   }
 
-  private onClose(currentPopup: PopupItem, params) {
-    this.props.popupManager.close(currentPopup.guid);
-    currentPopup.props &&
-      currentPopup.props.onClose &&
-      currentPopup.props.onClose(...params);
+  private onClose(guid: string) {
+    this.props.popupManager.close(guid);
   }
 
   public render() {
@@ -65,7 +74,7 @@ export class PopupsWrapper extends React.Component<PopupsWrapperProps> {
         currentPopup={currentPopup}
         key={currentPopup.guid}
         isOpen={currentPopup.isOpen}
-        onClose={params => this.onClose(currentPopup, params)}
+        onClose={this.onClose}
       />
     ));
   }
