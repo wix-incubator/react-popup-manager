@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [2.1.7] - 2024-01-31
 ### Added
-- `unmount` - `popupManager.open(Modal)` returns and object that now has `unmount` function that removes popup instance. <br>
+- `unmount` - `popupManager.open(Modal)` returns an object that now also has `unmount` function that removes popup's instance. <br>
   This fixes an [issue](https://github.com/wix-incubator/react-popup-manager/issues/19) of code still running after popup was closed.
 ### Fixed
 - `popupManager`'s `onClose` doesn't init a new function on every render.
