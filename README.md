@@ -76,7 +76,7 @@ export const Main = () => {
 }
 ```
 
-The modal Component will recieve the sent `props` and will also have `isOpen` and `onClose` added by the `popupManager`.<br>
+The modal Component will receive the sent `props` and will also have `isOpen` and `onClose` added by the `popupManager`.<br>
 `onClose` will trigger the `popupManager` to close the modal
 
 ```jsx
@@ -141,6 +141,7 @@ If not extended, it has 2 methods:
     * `onClose` - will be called on actual popup close with arguments
      > `isOpen` is not allowed.
 * returns - object of instance of open popup
-    * `close` - closes the popup
+    * `close` - closes the popup - sets `isOpen` to `false`. <i>Doesn't call `onClose` callback</i>
+    * `unmount` - removes popup instance
 
 `closeAll()` - closes all open popups.

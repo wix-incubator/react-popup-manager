@@ -1,5 +1,5 @@
 import {PopupManager} from '../popupManager';
-import { TestPopupUsesIsOpen  } from './testPopups';
+import { TestPopupUsesIsOpen  } from './TestPopupUsesIsOpen/TestPopupUsesIsOpen';
 import {popupInstance} from '../popupsDef';
 
 export class TestPopupsManager extends PopupManager {

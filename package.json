@@ -23,6 +23,7 @@
     "build": "yoshi build",
     "pretest": "yarn run build",
     "test": "yoshi test --jest",
+    "test:watch": "yoshi test --jest --watch",
     "posttest": "yoshi lint"
   },
   "repository": "https://github.com/wix-incubator/react-popup-manager.git",
