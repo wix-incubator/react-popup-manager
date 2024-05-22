@@ -12,6 +12,18 @@ const useRerender = () => {
     return React.useCallback(() => rerender({}), [])
 }
 
+function Popup({ show, onClose, currentPopup, ...props}){
+    const onCloseClick = React.useCallback((params: any) => {
+        return onClose(currentPopup, params)
+    }, [onClose, currentPopup])
+
+    return <currentPopup.ComponentClass
+        {...props}
+        show={show}
+        onCloseClick={onCloseClick}
+    />
+}
+
 export function PopupsWrapper({popupManager}: PopupsWrapperProps){
     const rerender = useRerender();
 
@@ -31,11 +43,12 @@ export function PopupsWrapper({popupManager}: PopupsWrapperProps){
     return <> 
     { 
         popupManager.popups.map((currentPopup: PopupItem) => (
-            <currentPopup.ComponentClass
+            <Popup 
                 {...currentPopup.props}
                 key={currentPopup.guid}
                 show={currentPopup.isOpen}
-                onCloseClick={(params: any) => onClose(currentPopup, params)}
+                currentPopup={currentPopup}
+                onClose={onClose}
             />
         ))
     }
