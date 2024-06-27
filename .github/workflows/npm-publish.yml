@@ -68,6 +68,9 @@ jobs:
     needs: create-release
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+          ssh-key: ${{ secrets.BUMP_SECRET }}
 
       - uses: actions/setup-node@v2
         with:
