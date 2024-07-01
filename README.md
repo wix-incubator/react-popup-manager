@@ -84,24 +84,19 @@ The modal Component will receive the sent `props` and will also have `isOpen` an
 import React from 'react';
 import Modal from 'react-modal';
 
-export class MyModal extends React.Component {
+export const MyModal = ({title, isOpen, onClose}) => {
 
-    close() {
+    const close = () => {
         // `onClose` will close the modal and will call the callback defined in main.jsx
-        this.props.onClose('param', 'param2', 'param3');
+        onClose('param', 'param2', 'param3');
     }
 
-    render() {
-        // `isOpen` is managed only by 'PopupManager'
-        const { isOpen } = this.props;
-
-        return (
+    return (
             <Modal isOpen={isOpen} >
-               <span>{this.props.title}</span>
-               <button onClick={() => this.close()}> close </button>
+               <span>{title}</span>
+               <button onClick={close}> close </button>
              </Modal>
-        );
-    }
+    );
 }
 ```
 
