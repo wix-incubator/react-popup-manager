@@ -138,7 +138,7 @@ If not extended, it has 2 methods:
 * returns - object of instance of open popup
     * `close` - closes the popup - sets `isOpen` to `false`. <i>Doesn't call `onClose` callback</i>
     * `unmount` - removes popup instance
-    * `response` - promise that is resolved after modal was closed. can be used instead of `onClose` `popupProps` callback.<br>
+    * `response` - promise that is resolved after modal was closed. <br>
   Returns response of `onClose` callback, otherwise, if `onClose` wasn't passed, the arguments that `onClose` was called with.<br>
   <i>note: can be used instead of passing `onClose` to the `popupProps`</i>
 
