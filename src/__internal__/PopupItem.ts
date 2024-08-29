@@ -33,20 +33,10 @@ export class PopupItem {
       this._resolve();
     }
 
-    let result: any;
-    let error: any;
     try {
-      result = await onAfterClose();
+      this._resolve(await onAfterClose());
     } catch (ex) {
-      error = ex;
-    }
-
-    if (error) {
-      this._reject(error);
-    } else if (result) {
-      this._resolve(result);
-    } else {
-      this._resolve();
+      this._reject(ex);
     }
   }
 

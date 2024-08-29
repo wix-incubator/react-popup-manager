@@ -70,8 +70,8 @@ export class PopupsWrapper extends React.Component<PopupsWrapperProps> {
     this.props.popupManager.subscribeOnPopupsChange(() => this.forceUpdate());
   }
 
-  private onClose(guid: string, result: any) {
-    this.props.popupManager.close(guid, result);
+  private onClose(guid: string, onAfterClose?: Function) {
+    this.props.popupManager.close(guid, onAfterClose);
   }
 
   public render() {

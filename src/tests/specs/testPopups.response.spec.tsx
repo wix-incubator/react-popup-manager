@@ -3,7 +3,7 @@ import {generateDataHook, TestPopupUsesIsOpen} from "../TestPopupUsesIsOpen/Test
 import {PopupManager} from "../../popupManager";
 import {TestPopupsDriver} from "../TestPopups.driver";
 
-describe('TestPopupUsesIsOpen', () => {
+describe('testPopups - "response" ', () => {
         let driver: TestPopupsDriver;
         const buttonOpenDataHook = 'button-open';
 
