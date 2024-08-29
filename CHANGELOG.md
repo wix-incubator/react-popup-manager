@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## [2.2.0] - 2024-08-29
+### Added
+- `response` - `popupManager.open(Modal)` returns an object that now also has `response` promise that is resolved with consumer's `onClose` `prop`'s response, and if not exist that the arguments that onClose were called with <br>
+  This is great for scenarios having confirmation modals that are needed only in some cases - such as navigating out of a page that hasn't been saved
+  This can also replace the need for `onClose` callback `prop` entirely.
+
 ## [2.1.7] - 2024-01-31
 ### Added
 - `unmount` - `popupManager.open(Modal)` returns an object that now also has `unmount` function that removes popup's instance. <br>

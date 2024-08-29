@@ -8,15 +8,18 @@ interface PopupsWrapperProps {
 
 interface SinglePopupLifeCycleProps {
   currentPopup: PopupItem;
-  onClose(guid: string): any;
+
+  onClose(guid: string, onAfterClose: Function): any;
+
   isOpen: boolean;
 }
 
 class SinglePopupLifeCycle extends React.Component<SinglePopupLifeCycleProps> {
   state = { isOpen: false };
+
   constructor(props) {
-      super(props);
-      this.onClose = this.onClose.bind(this)
+    super(props);
+    this.onClose = this.onClose.bind(this);
   }
 
   componentDidMount(): void {
@@ -35,10 +38,14 @@ class SinglePopupLifeCycle extends React.Component<SinglePopupLifeCycleProps> {
 
     return null;
   }
-  private onClose(...params: any[]) {
-      const {currentPopup, onClose} = this.props;
-      onClose(currentPopup.guid);
-      currentPopup.props?.onClose?.(...params);
+
+  private async onClose(...params: any[]) {
+    const { currentPopup, onClose } = this.props;
+    if (currentPopup.props?.onClose) {
+      onClose(currentPopup.guid, () => currentPopup.props?.onClose(...params));
+    } else {
+      onClose(currentPopup.guid, () => (params?.length ? params : undefined));
+    }
   }
 
   render() {
@@ -54,16 +61,17 @@ class SinglePopupLifeCycle extends React.Component<SinglePopupLifeCycleProps> {
 }
 
 export class PopupsWrapper extends React.Component<PopupsWrapperProps> {
-    constructor(props) {
-        super(props);
-        this.onClose = this.onClose.bind(this);
-    }
+  constructor(props) {
+    super(props);
+    this.onClose = this.onClose.bind(this);
+  }
+
   componentDidMount(): void {
     this.props.popupManager.subscribeOnPopupsChange(() => this.forceUpdate());
   }
 
-  private onClose(guid: string) {
-    this.props.popupManager.close(guid);
+  private onClose(guid: string, result: any) {
+    this.props.popupManager.close(guid, result);
   }
 
   public render() {
