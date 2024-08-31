@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## [2.2.0] - 2024-08-29
+### Added
+- `response` - `response` was added to the return value of the `open` method. <br>
+  `response` promise that is resolved after modal was closed. can be used instead of `onClose` `popupProps` callback.<br>
+If `onClose` callback is provided, it returns the callback's return value. <br>
+If `onClose` wasn't provided, it returns the arguments that `onClose` was called with. <br>
+
 ## [2.1.7] - 2024-01-31
 ### Added
 - `unmount` - `popupManager.open(Modal)` returns an object that now also has `unmount` function that removes popup's instance. <br>

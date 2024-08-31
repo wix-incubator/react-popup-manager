@@ -50,10 +50,11 @@ export class PopupManagerInternal implements PopupManager {
     return {
       close: () => this.close(guid),
       unmount: () => this.unmount(guid),
+      response: newPopupItem.response,
     };
   };
 
-  public close(popupGuid: string): void {
+  public close(popupGuid: string, onAfterClose?: Function): void {
     const currentPopupIndex = this.openPopups.findIndex(
       ({ guid }) => guid === popupGuid,
     );
@@ -64,7 +65,7 @@ export class PopupManagerInternal implements PopupManager {
 
     const currentPopup = this.openPopups[currentPopupIndex];
 
-    currentPopup.close();
+    currentPopup.close(onAfterClose);
 
     const closedPopup = this.openPopups.splice(currentPopupIndex, 1)[0];
     this.closedPopups.unshift(closedPopup);
