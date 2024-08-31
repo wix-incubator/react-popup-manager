@@ -133,13 +133,14 @@ If not extended, it has 2 methods:
 `open(componentClass, popupProps)` - opens popup. render's popup component
 * `componentClass` - component's class or function
 * `popupProps` <i>(optional)</i> - consumer's popup props and also accepts these:
-    * `onClose` - will be called on actual popup close with arguments
-     > `isOpen` is not allowed.
+    * `onClose` - Will be called on actual popup close with arguments
+     > `isOpen` Is not allowed.
 * returns - object of instance of open popup
-    * `close` - closes the popup - sets `isOpen` to `false`. <i>Doesn't call `onClose` callback</i>
-    * `unmount` - removes popup instance
-    * `response` - promise that is resolved after modal was closed. <br>
-  Returns response of `onClose` callback, otherwise, if `onClose` wasn't passed, the arguments that `onClose` was called with.<br>
+    * `close` - Closes the popup - sets `isOpen` to `false`. <i>Doesn't call `onClose` callback</i>
+    * `unmount` - Removes popup instance
+    * `response` - A promise that resolves once the modal is closed.<br>
+If `onClose` callback is provided, it returns the callback's return value. <br>
+If `onClose` wasn't provided, it returns the arguments that `onClose` was called with. <br>
   <i>note: can be used instead of passing `onClose` to the `popupProps`</i>
 
 `closeAll()` - closes all open popups.
