@@ -1,4 +1,8 @@
-# react-popup-manager &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/wix-incubator/react-popup-manager/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/react-popup-manager.svg?style=flat)](https://www.npmjs.com/package/react-popup-manager)
+# react-popup-manager &middot; 
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/wix-incubator/react-popup-manager/blob/master/LICENSE) 
+[![npm version](https://img.shields.io/npm/v/react-popup-manager.svg?style=flat)](https://www.npmjs.com/package/react-popup-manager)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/react-popup-manager?style=flat-square])](https://travis-ci.org/yjose/react-popup-manager)
+[![downloads](https://img.shields.io/npm/dt/react-popup-manager.svg?style=flat-square)](http://www.npmtrends.com/react-popup-manager)
 
 Manage react popups, Modals, Lightboxes, Notifications etc.
 
