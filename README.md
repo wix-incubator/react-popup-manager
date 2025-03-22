@@ -20,7 +20,8 @@ An example of how using this library will simplify your code
 
 The Old Way                     |  The react-popup-manager Way
 :-------------------------:|:-------------------------:
-![](https://user-images.githubusercontent.com/11004313/152688557-044d96d5-5474-464c-9315-edfc36d5a572.png) | ![](https://user-images.githubusercontent.com/11004313/152688627-be0391a9-dd7b-4767-96d0-77f73c5b9216.png)
+![image](https://github.com/user-attachments/assets/c002d0b7-f29e-4821-a663-c08ee591dcdb) | ![image](https://github.com/user-attachments/assets/7af66386-76e1-44b5-b6ae-33d1c5ff36c5)
+
 
 
 
@@ -41,15 +42,16 @@ yarn add react-popup-manager
 ```jsx
 import React from 'react';
 import { PopupProvider, usePopupManager } from 'react-popup-manager';
+import Modal from 'any-modal-library';
 
 // Your modal component
 const MyModal = ({ isOpen, onClose }) => (
-  <div>
+  <Modal isOpen={isOpen} >
     <h1>My Modal</h1>
     <button onClick={() => onClose({ success: true })}>
       Close
     </button>
-  </div>
+  </Modal>
 );
 
 // Component that uses the modal
@@ -84,13 +86,14 @@ export default App;
 ```jsx
 import React, { useState } from 'react';
 import { usePopupManager } from 'react-popup-manager';
+import Modal from 'any-modal-library';
 
 const ConfirmationModal = ({ isOpen, onClose, message }) => (
-  <div>
+  <Modal isOpen={isOpen} >
     <h2>{message}</h2>
     <button onClick={() => onClose({ confirmed: true })}>Yes</button>
     <button onClick={() => onClose({ confirmed: false })}>No</button>
-  </div>
+  </Modal>
 );
 
 const TodoList = () => {
@@ -167,7 +170,6 @@ Opens a popup and renders the popup component.
 
 **Response Resolution:**
 The `response` promise resolves with:
-1. Single argument:
 ```jsx
 // In your modal:
 onClose({ data: 'success' });
@@ -176,17 +178,6 @@ onClose({ data: 'success' });
 const { response } = popupManager.open(MyModal);
 const result = await response;
 console.log(result); // { data: 'success' }
-```
-
-2. Multiple arguments:
-```jsx
-// In your modal:
-onClose('success', { meta: true });
-
-// In your component:
-const { response } = popupManager.open(MyModal);
-const result = await response;
-console.log(result); // ['success', { meta: true }]
 ```
 
 #### closeAll()
