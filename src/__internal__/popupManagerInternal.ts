@@ -48,12 +48,17 @@ export class PopupManagerInternal implements PopupManager {
 
     this.callPopupsChangeEvents();
     return {
-      close: () => this.close(guid),
+      close: (...args: any[]) => this.close(guid, undefined, args),
       unmount: () => this.unmount(guid),
+      response: newPopupItem.response,
     };
   };
 
-  public close(popupGuid: string): void {
+  public close(
+    popupGuid: string,
+    onConsumerOnCloseCallback?: Function,
+    args?: any[],
+  ): void {
     const currentPopupIndex = this.openPopups.findIndex(
       ({ guid }) => guid === popupGuid,
     );
@@ -63,8 +68,7 @@ export class PopupManagerInternal implements PopupManager {
     }
 
     const currentPopup = this.openPopups[currentPopupIndex];
-
-    currentPopup.close();
+    currentPopup.close(onConsumerOnCloseCallback, args);
 
     const closedPopup = this.openPopups.splice(currentPopupIndex, 1)[0];
     this.closedPopups.unshift(closedPopup);

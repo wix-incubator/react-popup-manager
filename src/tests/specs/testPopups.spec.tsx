@@ -1,11 +1,11 @@
-import {TestPopupsDriver} from './TestPopups.driver';
-import {TestPopupsManager} from './testPopupsManager';
+import {TestPopupsDriver} from '../TestPopups.driver';
+import {TestPopupsManager} from '../testPopupsManager';
 import * as React from 'react';
-import {generateDataHook, TestPopupUsesIsOpen} from "./TestPopupUsesIsOpen/TestPopupUsesIsOpen";
-import {PopupManager, PopupProps} from '../index';
-import {usePopupManager} from '../index';
+import {generateDataHook, TestPopupUsesIsOpen} from "../TestPopupUsesIsOpen/TestPopupUsesIsOpen";
+import {PopupManager, PopupProps} from '../../index';
+import {usePopupManager} from '../../index';
 import {useEffect} from "react";
-import {getByDataHook} from "./getByDataHook";
+import {getByDataHook} from "../getByDataHook";
 
 describe('Popups', () => {
   let driver: TestPopupsDriver;
@@ -170,13 +170,14 @@ describe('Popups', () => {
 
   it('should close popup with params', () => {
     const onClose = jest.fn();
+    const expectedArgs = ['value', true, 1];
 
     justBeforeEachTest({popupManager: new TestPopupsManager()});
-    (popupManager as TestPopupsManager).openTestPopup(generateDataHook(), onClose);
+    (popupManager as TestPopupsManager).openTestPopup(generateDataHook(), onClose, '', expectedArgs);
     driver.update();
     driver.get.popupDriver(generateDataHook()).when.closePopup();
     expect(driver.get.popupDriver(generateDataHook()).get.isOpen()).toBe(false);
-    expect(onClose).toHaveBeenCalledWith('value', true, 1);
+    expect(onClose).toHaveBeenCalledWith(...expectedArgs);
   });
 
   it('should pass popup its own props', () => {

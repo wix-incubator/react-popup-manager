@@ -1,6 +1,32 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+
+## [2.2.0] - 2024-08-29
+### Added
+- New Promise-based API: Added `response` to the return value of `open` method
+  ```typescript
+  const { response } = popupManager.open(MyModal);
+  const result = await response;
+  ```
+- Improved handling of popup results:
+  - Single argument is returned directly: `onClose({ data: 'value' })` → `const result = await response; // { data: 'value' }`
+  - Multiple arguments preserved as array: `onClose(arg1, arg2)` → `const [arg1, arg2] = await response;`
+
+### Deprecated
+- `onClose` callback in `popupProps` is now deprecated in favor of using the `response` promise
+  ```typescript
+  // Instead of
+  popupManager.open(MyModal, {
+    onClose: (result) => console.log(result)
+  });
+
+  // Use
+  const { response } = popupManager.open(MyModal);
+  const result = await response;
+  console.log(result);
+  ```
+
 ## [2.1.7] - 2024-01-31
 ### Added
 - `unmount` - `popupManager.open(Modal)` returns an object that now also has `unmount` function that removes popup's instance. <br>
@@ -37,6 +63,3 @@ to get the upgrade features that fix the animation issue you need to use these:
 - `PopupManager.onPopupsChangeEvents`  - for internal use  only and will be removed in the future.
 - `PopupManager.subscribeOnPopupsChange`  - for internal use  only and will be removed in the future.
 - `PopupManager.close`  - for internal use  only and will be removed in the future.
-
-
-
