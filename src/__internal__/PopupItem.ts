@@ -28,20 +28,30 @@ export class PopupItem {
     return this._response;
   }
 
-  private async resolveResponse(onAfterClose: Function) {
-    if (!onAfterClose) {
-      this._resolve();
+  private async resolveResponse(
+    onConsumerOnCloseCallback?: Function,
+    closeArgs: any[] = [],
+  ) {
+    if (!onConsumerOnCloseCallback) {
+      this._resolve(
+        closeArgs.length === 1
+          ? closeArgs[0]
+          : closeArgs.length
+          ? closeArgs
+          : undefined,
+      );
+      return;
     }
 
     try {
-      this._resolve(await onAfterClose());
+      this._resolve(await onConsumerOnCloseCallback());
     } catch (ex) {
       this._reject(ex);
     }
   }
 
-  public close(onAfterClose?: Function) {
+  public close(onConsumerOnCloseCallback?: Function, closeArgs?: any[]) {
     this._isOpen = false;
-    void this.resolveResponse(onAfterClose);
+    void this.resolveResponse(onConsumerOnCloseCallback, closeArgs);
   }
 }

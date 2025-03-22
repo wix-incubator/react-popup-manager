@@ -57,6 +57,10 @@
     "typescript": "~4.3.0",
     "yoshi": "^4.87.0"
   },
+ "peerDependencies": {
+   "react": ">=16.0.0",
+   "react-dom": ">=16.0.0"
+ },
   "lint-staged": {
     "linters": {
       "*.{js,ts,tsx,scss,less}": "yoshi lint"

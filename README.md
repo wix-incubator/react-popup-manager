@@ -1,9 +1,9 @@
-# react-popup-manager &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/wix-incubator/typed-locale-keys/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/react-popup-manager.svg?style=flat)](https://www.npmjs.com/package/react-popup-manager)
+# React Popup Manager &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/wix-incubator/typed-locale-keys/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/react-popup-manager.svg?style=flat)](https://www.npmjs.com/package/react-popup-manager)
 
-Manage react popups, Modals, Lightboxes, Notifications etc.
+Manage react popups, Modals, Lightboxes, Notifications, etc. easily.
 
 ## What
-An agnostic react provider that lets you handle opening and closing popups separately from you're Component `render` function.
+An agnostic react provider that lets you handle opening and closing popups separately from your Component `render` function.
 
 ## Why
 * No need to manage the `isOpen` state
@@ -22,125 +22,202 @@ The Old Way                     |  The react-popup-manager Way
 
 ## How
 
-### install
+### Installation
 
-```
-$ npm i --save react-popup-manager
-$ yarn add react-popup-manager
+```bash
+npm install react-popup-manager
+# or
+yarn add react-popup-manager
 ```
 
-### example
-Here is a simple example of how to use `react-popup-manager`
-<br><br>
-Wrap the root of the app with `PopupProvider`
+### Usage
+
+#### Basic Example
 
 ```jsx
-// app.jsx
-import React from "react";
-import ReactDOM from "react-dom";
-import { PopupProvider } from "react-popup-manager";
-import { Main } from "./Main";
-
-ReactDOM.render(
-  <PopupProvider>
-    <Main />
-  </PopupProvider>,
-  document.getElementById("root")
-);
-```
-
-Use the hook `usePopupManager` to open a modal
-
-```jsx
-// main.jsx
-import React from "react";
-import { usePopupManager } from "react-popup-manager";
-import { MyModal } from './MyModal'
-
-export const Main = () => {
-  const popupManager = usePopupManager();
-  const openModal = () => {
-    // open MyModal with it's needed `props` and an `onClose` callback function
-    popupManager.open(MyModal, {
-      title: 'my modal',
-      onClose: (...params) => console.log('modal has closed with:', ...params), // modal has closed with: param param2 param3
-    }); 
-  }
-  return (
-      <div>
-        <button onClick={() => openModal()}>
-          open modal
-        </button>
-      </div>
-  );
-}
-```
-
-The modal Component will receive the sent `props` and will also have `isOpen` and `onClose` added by the `popupManager`.<br>
-`onClose` will trigger the `popupManager` to close the modal
-
-```jsx
-// MyModal.jsx
 import React from 'react';
-import Modal from 'react-modal';
+import { PopupProvider, usePopupManager } from 'react-popup-manager';
 
-export const MyModal = ({title, isOpen, onClose}) => {
+// Your modal component
+const MyModal = ({ isOpen, onClose }) => (
+  <div>
+    <h1>My Modal</h1>
+    <button onClick={() => onClose({ success: true })}>
+      Close
+    </button>
+  </div>
+);
 
-    const close = () => {
-        // `onClose` will close the modal and will call the callback defined in main.jsx
-        onClose('param', 'param2', 'param3');
-    }
+// Component that uses the modal
+const MyComponent = () => {
+  const popupManager = usePopupManager();
 
-    return (
-            <Modal isOpen={isOpen} >
-               <span>{title}</span>
-               <button onClick={close}> close </button>
-             </Modal>
-    );
-}
+  const handleOpenModal = async () => {
+    const { response } = popupManager.open(MyModal);
+    const result = await response;
+    console.log(result); // { success: true }
+  };
+
+  return (
+    <div>
+      <button onClick={handleOpenModal}>Open Modal</button>
+    </div>
+  );
+};
+
+// Root component with provider
+const App = () => (
+  <PopupProvider>
+    <MyComponent />
+  </PopupProvider>
+);
+
+export default App;
 ```
 
-The library is agnostic to any popup library you decide to use.
-<br>
-~ in this example we used `react-modal`
+### Advanced Example
+
+```jsx
+import React, { useState } from 'react';
+import { usePopupManager } from 'react-popup-manager';
+
+const ConfirmationModal = ({ isOpen, onClose, message }) => (
+  <div>
+    <h2>{message}</h2>
+    <button onClick={() => onClose({ confirmed: true })}>Yes</button>
+    <button onClick={() => onClose({ confirmed: false })}>No</button>
+  </div>
+);
+
+const TodoList = () => {
+  const [todos, setTodos] = useState(['Task 1', 'Task 2']);
+  const popupManager = usePopupManager();
+
+  const handleDeleteTodo = async (index) => {
+    const { response } = popupManager.open(ConfirmationModal, {
+      message: 'Are you sure you want to delete this task?'
+    });
+
+    const result = await response;
+    if (result.confirmed) {
+      setTodos(todos.filter((_, i) => i !== index));
+    }
+  };
+
+  return (
+    <ul>
+      {todos.map((todo, index) => (
+        <li key={index}>
+          {todo}
+          <button onClick={() => handleDeleteTodo(index)}>Delete</button>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+export default TodoList;
+```
 
 ## API
 
-### `PopupProvider`
-A react context provider, should wrap the root of the app in order to provide the `popupManager`. <br>
-`props`:
-* `popupManager` <i>(optional)</i> - Custom Popup Manager. can send an extended `PopupManager`. <br>
- <i>~ Default : uses `PopupManager`</i>
+### Hooks
 
-### `usePopupManager`
-React hook that returns `popupManager`.
-For class components, check the `withPopups` HOC below
+#### usePopupManager()
+Returns the popup manager instance with methods to control popups.
 
-### `withPopups(managerName)`
-An HOC that adds `popupManager` to the component's `props`.<br>
-Can be used as an alternative to `usePopupManager`.
-<br><br>
-`parameters`:
-* `managerName` <i>(optional)</i> - set manager name that will be added to props.
+```jsx
+const popupManager = usePopupManager();
+```
 
-<i>~ Default : uses `popupManager`</i>
+### Components
 
-### `PopupManager`
-A singletone service that manages the state of the popups of the app.<br>
-Can be extended for specific needs (<i>for example: `showToast`, `openConfirmationDialog`</i>)<br>
-If not extended, it has 2 methods:
-<br><br>
-`open(componentClass, popupProps)` - opens popup. render's popup component
-* `componentClass` - component's class or function
-* `popupProps` <i>(optional)</i> - consumer's popup props and also accepts these:
-    * `onClose` - Will be called on actual popup close with arguments
-     > `isOpen` Is not allowed.
-* returns - object of instance of open popup
-    * `close` - Closes the popup - sets `isOpen` to `false`. <i>Doesn't call `onClose` callback</i>
-    * `unmount` - Removes popup instance
-    * `response` - A promise that resolves once the modal is closed.<br>
-If `onClose` callback is provided, it returns the callback's return value. <br>
-If `onClose` wasn't provided, it returns the arguments that `onClose` was called with. <br>
-  <i>note: can be used instead of passing `onClose` to the `popupProps`</i>
+#### PopupProvider
+A React context provider that should wrap your application.
 
-`closeAll()` - closes all open popups.
+```jsx
+<PopupProvider>
+  <App />
+</PopupProvider>
+```
+
+### PopupManager Methods
+
+#### open(componentClass, popupProps)
+Opens a popup and renders the popup component.
+
+**Parameters:**
+* `componentClass`: Component to render
+* `popupProps` (optional): Props passed to the popup component
+  * `onClose` (deprecated): Legacy callback method, use `response` instead
+  > Note: `isOpen` prop is not allowed and will be managed internally
+
+**Returns:**
+```typescript
+{
+  close: (...args: any[]) => void;      // Closes the popup
+  unmount: () => void;    // Removes popup from DOM
+  response: Promise<any>; // Resolves when popup closes
+}
+```
+
+**Response Resolution:**
+The `response` promise resolves with:
+1. Single argument:
+```jsx
+// In your modal:
+onClose({ data: 'success' });
+
+// In your component:
+const { response } = popupManager.open(MyModal);
+const result = await response;
+console.log(result); // { data: 'success' }
+```
+
+2. Multiple arguments:
+```jsx
+// In your modal:
+onClose('success', { meta: true });
+
+// In your component:
+const { response } = popupManager.open(MyModal);
+const result = await response;
+console.log(result); // ['success', { meta: true }]
+```
+
+#### closeAll()
+Closes all open popups.
+
+## Migration Guide
+
+### From Callback to Async/Await
+
+#### Before (Deprecated)
+```jsx
+const MyComponent = () => {
+  const popupManager = usePopupManager();
+
+  const handleOpenModal = () => {
+    popupManager.open(MyModal, {
+      onClose: (result) => console.log(result)
+    });
+  };
+};
+```
+
+#### After (Recommended)
+```jsx
+const MyComponent = () => {
+  const popupManager = usePopupManager();
+
+  const handleOpenModal = async () => {
+    const { response } = popupManager.open(MyModal);
+    const result = await response;
+    console.log(result);
+  };
+};
+```
+
+## License
+
+MIT
